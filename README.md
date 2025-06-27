@@ -1,38 +1,48 @@
-# 網頁骨架
+# My Web Scaffold
 
-這是一個 Monorepo 網頁骨架專案，旨在為構建現代網頁應用程式提供一個穩健且可擴展的基礎。它利用 `pnpm` 進行高效的套件管理，並包含一個 `web` 應用程式、共享的 `ui` 元件、`types` 和 `utils` 套件。
+這是一個基於 **pnpm workspace** 的 **Monorepo**，旨在提供一個現代化、可擴展的網頁應用程式開發骨架。它整合了業界最佳實踐，包含獨立的前端應用、可共享的 UI 元件、工具函式庫和型別定義。
 
-## 功能
+## ✨ 核心目標
 
-*   **Monorepo 結構：** 使用 `pnpm` 工作區進行組織，以高效管理多個套件。
-*   **React.js：** 一個用於構建使用者介面的宣告式、基於元件的 JavaScript 函式庫。
-*   **Vite：** 一個快速且有主見的現代網頁專案建構工具，提供即時伺服器啟動和閃電般的 HMR。
-*   **TypeScript：** 提供靜態型別檢查，以提高程式碼品質和開發者體驗。
-*   **Tailwind CSS：** 一個實用程式優先的 CSS 框架，用於快速構建自訂設計。
-*   **ESLint & Prettier：** 用於一致的程式碼風格和品質。
-*   **Vitest：** 一個由 Vite 驅動的快速單元測試框架。
-*   **Husky & Commitlint：** 用於 Git 鉤子和常規提交訊息。
+*   **程式碼共享與重用**：透過 `packages` 目錄，在不同應用之間共享 UI 元件、工具函式和型別定義。
+*   **開發效率**：利用 Vite 提供快速的開發伺服器和建構流程。
+*   **程式碼品質**：整合 ESLint, Prettier, TypeScript 和自動化的 Git 鉤子，確保程式碼風格一致且型別安全。
+*   **結構化與可維護性**：清晰的目錄結構和模組化設計，便於團隊協作和長期維護。
 
-## 專案結構
+## 🛠️ 技術棧
+
+| 分類 | 技術 | 用途 |
+| :--- | :--- | :--- |
+| **主要框架** | React 18 | 建立使用者介面的核心函式庫。 |
+| **建構工具** | Vite | 提供極速的開發伺服器和優化的生產環境建構。 |
+| **語言** | TypeScript | 為專案提供靜態型別檢查，提升程式碼健壯性。 |
+| **樣式** | Tailwind CSS | 一個 Utility-First 的 CSS 框架，用於快速設計 UI。 |
+| **套件管理** | pnpm | 高效能的套件管理器，並透過 workspace 功能支援 Monorepo。 |
+| **測試** | Vitest, React Testing Library | 用於單元測試和元件測試，確保程式碼品質。 |
+| **程式碼規範** | ESLint, Prettier | 強制程式碼風格和語法規範。 |
+| **Commit 規範** | Commitlint, cz-conventional-changelog | 確保 Git 提交訊息的一致性和可讀性。 |
+| **Git 鉤子** | Husky | 在 Git 事件（如 commit, push）觸發時自動執行腳本。 |
+
+## 📂 專案結構
 
 ```
 .
 ├── apps/
 │   └── web/             # 主要網頁應用程式
 ├── packages/
-│   ├── types/           # ��享的 TypeScript 型別定義
-│   ├── ui/              # 可重用的 UI 元件 (例如：Button)
-│   └── utils/           # 通用工具函式 (例如：cn, formatDate)
-├── .husky/              # Git 鉤子
-├── .vscode/             # VS Code 設定
+│   ├── types/           # 共享的 TypeScript 型別定義 (e.g., User)
+│   ├── ui/              # 可重用的 UI 元件 (e.g., Button, Card)
+│   └── utils/           # 通用工具函式 (e.g., cn, formatDate)
+├── .husky/              # Git 鉤子設定
+├── scripts/             # 自動化腳本 (e.g., generate-commit-message.mjs)
+├── .commitlintrc.js     # Commitlint 設定
 ├── eslint.config.js     # ESLint 設定
 ├── prettier.config.js   # Prettier 設定
-├── tailwind.config.js   # Tailwind CSS 設定
-├── tsconfig.json        # TypeScript 設定
-└── pnpm-workspace.yaml  # pnpm 工作區定義
+├── tailwind.config.js   # 根 Tailwind CSS 設定
+└── tsconfig.json        # 根 TypeScript 設定
 ```
 
-## 開始使用
+## 🚀 開始使用
 
 ### 先決條件
 
@@ -54,84 +64,36 @@
 
 ### 開發
 
-啟動網頁應用程式的開發伺服器：
+啟動 `apps/web` 的開發伺服器：
 
 ```bash
 pnpm dev
 ```
 
-這通常會在 `http://localhost:5173` 啟動網頁應用程式。
+伺服器將會運行在 `http://localhost:5173`。
 
-### 建構
+## 📜 可用腳本
 
-建構所有套件和網頁應用程式以供生產：
+| 指令 | 描述 |
+| :--- | :--- |
+| `pnpm dev` | 啟動開發伺服器。 |
+| `pnpm build` | 建構所有套件和應用程式以供生產。 |
+| `pnpm test` | 執行所有測試。 |
+| `pnpm test:watch` | 以監聽模式執行測試。 |
+| `pnpm lint` | 檢查整個專案的程式碼風格。 |
+| `pnpm format` | 自動格式化所有檔案。 |
+| `pnpm type-check` | 執行 TypeScript 的型別檢查。 |
+| `pnpm clean` | 清理所有 `dist` 目錄。 |
+| `pnpm commit` | 使用 Commitizen 引導式地產生提交訊息。 |
 
-```bash
-pnpm build
-```
+## 🤝 貢獻
 
-### 測試
+歡迎所有貢獻！請在發送 Pull Request 前確保您的程式碼通過所有品質檢查。
 
-執行所有測試：
+本專案嚴格遵守 [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/) 規範。您可以使用 `pnpm commit` 來確保您的提交訊息符合格式。
 
-```bash
-pnpm test
-```
+## 🔮 後續發展建議
 
-以監聽模式執行測試：
-
-```bash
-pnpm test:watch
-```
-
-### Linting 和格式化
-
-對程式碼庫進行 Linting：
-
-```bash
-pnpm lint
-```
-
-修復 Linting 問題：
-
-```bash
-pnpm lint:fix
-```
-
-使用 Prettier 格式化程式碼：
-
-```bash
-pnpm format
-```
-
-檢查格式而不應用更改：
-
-```bash
-pnpm format:check
-```
-
-### 型別檢查
-
-對所有 TypeScript 檔案執行型別檢查：
-
-```bash
-pnpm type-check
-```
-
-### 清理
-
-清理建構產物和 `dist` 目錄：
-
-```bash
-pnpm clean
-```
-
-## 貢獻
-
-請遵循 [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/) 規範來編寫提交訊息。此專案使用 `commitizen` 進行引導式提交。
-
-進行提交：
-
-```bash
-pnpm commit
-```
+*   **元件庫文件**: 為 `packages/ui` 增加 Storybook 或類似工具，以建立元件文件和互動式展示。
+*   **狀態管理**: 根據應用複雜度，考慮引入 Zustand, Redux Toolkit 或其他狀態管理方案。
+*   **CI/CD**: 建立自動化的持續整合與部署流程 (例如使用 GitHub Actions)，在程式碼推送到主分支時自動執行測試、建構和部署。
