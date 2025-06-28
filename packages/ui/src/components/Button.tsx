@@ -10,8 +10,7 @@ const buttonVariants = {
     'bg-indigo-600 text-white hover:bg-indigo-700 disabled:bg-indigo-400',
   outline:
     'border border-indigo-600 text-indigo-600 hover:bg-indigo-100 disabled:text-gray-400 disabled:border-gray-300',
-  secondary:
-    'bg-gray-200 text-gray-900 hover:bg-gray-300 disabled:bg-gray-100',
+  secondary: 'bg-gray-200 text-gray-900 hover:bg-gray-300 disabled:bg-gray-100',
   ghost: 'hover:bg-gray-100',
   link: 'text-indigo-600 underline-offset-4 hover:underline',
 };

@@ -7,11 +7,12 @@
     "declarationMap": true,
     "composite": true
   },
-  "include": [
-    "src/**/*"
-  ],
-  "exclude": [
-    "dist",
-    "node_modules"
-  ]
+  "paths": {
+    "@/*": ["./src/*"],
+    "@ui/*": ["../../packages/ui/src/*"],
+    "@utils/*": ["../../packages/utils/src/*"],
+    "@types/*": ["../../packages/types/src/*"]
+  },
+  "include": ["src/**/*"],
+  "exclude": ["dist", "node_modules"]
 }
