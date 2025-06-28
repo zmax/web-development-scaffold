@@ -1,28 +1,35 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
+import { HttpError } from '../utils/HttpError';
 
-export interface AuthRequest extends Request {
-  userId?: string;
+interface JwtPayload {
+  userId: string;
 }
 
 export const authMiddleware = (
-  req: AuthRequest,
+  req: Request,
   res: Response,
   next: NextFunction
 ) => {
-  const token = req.headers.authorization?.split(' ')[1];
-  if (!token) {
-    return res.status(401).json({ message: 'Access denied' });
+  const authHeader = req.headers.authorization;
+
+  if (!authHeader || !authHeader.startsWith('Bearer ')) {
+    return next(new HttpError(401, '未提供認證權杖'));
   }
 
+  const token = authHeader.split(' ')[1];
+
   try {
-    const decoded = jwt.verify(
-      token,
-      process.env.JWT_SECRET || 'your_jwt_secret'
-    ) as { userId: string };
-    req.userId = decoded.userId;
+    const secret = process.env.JWT_SECRET;
+    if (!secret) {
+      // 這是伺服器設定問題，應拋出 500 錯誤
+      throw new HttpError(500, '伺服器設定錯誤：JWT 金鑰未設定');
+    }
+    const decoded = jwt.verify(token, secret) as JwtPayload;
+    req.user = { id: decoded.userId }; // 將使用者 ID 附加到請求物件上
     next();
   } catch (error) {
-    res.status(400).json({ message: 'Invalid token' });
+    // 處理 jwt.verify 拋出的錯誤 (例如 TokenExpiredError, JsonWebTokenError)
+    return next(new HttpError(401, '無效或過期的認證權杖'));
   }
 };
