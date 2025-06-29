@@ -4,15 +4,13 @@
     "outDir": "./dist",
     "rootDir": "./src",
     "module": "NodeNext",
-    "moduleResolution": "NodeNext",
-    "noEmit": false,
-    "isolatedModules": false,
-    "baseUrl": ".",
-    "paths": {
-      "@types/*": ["../../packages/types/src/*"],
-      "@lib/*": ["./src/lib/*"]
-    }
+    "moduleResolution": "NodeNext"
   },
-  "include": ["src/**/*.ts"],
-  "exclude": ["node_modules", "dist"]
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "dist"],
+  "references": [
+    {
+      "path": "../../packages/types"
+    }
+  ]
 }

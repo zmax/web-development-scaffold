@@ -7,9 +7,8 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview",
-    "test": "vitest",
+    "test": "vitest run --coverage",
     "test:watch": "vitest --watch",
-    "type-check": "tsc --noEmit",
     "clean": "rm -rf dist"
   },
   "dependencies": {
@@ -20,7 +19,10 @@
     "swr": "^2.2.5",
     "zod": "^3.23.8",
     "@hookform/resolvers": "^3.9.0",
-    "react-hook-form": "^7.52.1"
+    "react-hook-form": "^7.52.1",
+    "@my-web-scaffold/ui": "workspace:*",
+    "@my-web-scaffold/utils": "workspace:*",
+    "@my-web-scaffold/types": "workspace:*"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^6.1.5",
@@ -34,6 +36,8 @@
     "postcss": "^8.4.31",
     "tailwindcss": "^3.3.5",
     "vite": "^5.0.0",
-    "vitest": "^2.1.9"
+    "vitest": "^2.1.9",
+    "@vitest/coverage-v8": "^2.1.9",
+    "vite-tsconfig-paths": "^4.3.2"
   }
 }

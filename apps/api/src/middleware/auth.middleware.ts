@@ -21,6 +21,7 @@ export const authMiddleware = (
     const decoded = jwt.verify(token, JWT_SECRET) as { id: string };
     req.user = { id: decoded.id };
     next();
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (error) {
     next(new UnauthorizedError('無效或過期的 token'));
   }

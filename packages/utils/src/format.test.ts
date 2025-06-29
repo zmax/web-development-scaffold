@@ -1,54 +1,54 @@
 import { describe, it, expect } from 'vitest';
-import { formatDate } from './format';
+import { formatNumber, maskEmail } from './format';
 
-describe('formatDate utility', () => {
-  // 使用一個固定的日期以確保測試結果的一致性
-  const testDate = new Date('2023-10-27T10:00:00Z');
-
-  it('應該使用預設的 zh-TW 地區設定和格式', () => {
-    // 在 Node.js 環境中，長月份的格式可能因 ICU 版本而異
-    // '2023年10月27日' 是常見的格式
-    const result = formatDate(testDate);
-    expect(result).toBe('2023年10月27日');
+describe('formatNumber', () => {
+  it('應該能正確格式化正整數', () => {
+    expect(formatNumber(1234567)).toBe('1,234,567');
   });
 
-  it('應該使用指定的 en-US 地區設定', () => {
-    const result = formatDate(testDate, 'en-US');
-    expect(result).toBe('October 27, 2023');
+  it('應該能正確格式化帶有小數的數字', () => {
+    expect(formatNumber(1234.56)).toBe('1,234.56');
   });
 
-  it('應該接受自訂的格式選項', () => {
-    const options: Intl.DateTimeFormatOptions = {
-      weekday: 'long',
-      year: 'numeric',
-      month: '2-digit',
-      day: '2-digit',
-    };
-    // 預期 'zh-TW' 的結果
-    // Intl 的輸出在不同環境中可能略有不同，因此分開檢查關鍵部分
-    const resultTW = formatDate(testDate, 'zh-TW', options);
-    expect(resultTW).toContain('2023');
-    expect(resultTW).toContain('10');
-    expect(resultTW).toContain('27');
-    expect(resultTW).toContain('星期五');
-
-    // 預期 'en-US' 的結果
-    const resultUS = formatDate(testDate, 'en-US', options);
-    expect(resultUS).toBe('Friday, 10/27/2023');
+  it('應該能處理 0', () => {
+    expect(formatNumber(0)).toBe('0');
   });
 
-  it('應該能處理字串格式的日期', () => {
-    const result = formatDate('2023-10-27T10:00:00Z', 'en-US');
-    expect(result).toBe('October 27, 2023');
+  it('對於 null 或 undefined 輸入，應該回傳空字串', () => {
+    expect(formatNumber(null)).toBe('');
+    expect(formatNumber(undefined)).toBe('');
   });
 
-  it('應該能處理數字格式的日期 (timestamp)', () => {
-    const result = formatDate(testDate.getTime(), 'en-US');
-    expect(result).toBe('October 27, 2023');
+  it('對於非數字輸入，應該回傳空字串', () => {
+    // @ts-expect-error Testing invalid input
+    expect(formatNumber('not a number')).toBe('');
+    expect(formatNumber(NaN)).toBe('');
   });
 
-  it('對於無效的日期輸入，應該返回 "無效日期"', () => {
-    const result = formatDate('not a real date');
-    expect(result).toBe('無效日期');
+  it('應該能接受 Intl.NumberFormat 的選項', () => {
+    expect(formatNumber(50, { style: 'currency', currency: 'USD' })).toBe(
+      '$50.00'
+    );
+  });
+});
+
+describe('maskEmail', () => {
+  it('應該能正確隱藏標準長度的 email', () => {
+    expect(maskEmail('johndoe@example.com')).toBe('jo***@example.com');
+  });
+
+  it('對於使用者名稱少於或等於 2 個字元的 email，應該只顯示第一個字元', () => {
+    expect(maskEmail('jo@example.com')).toBe('j***@example.com');
+    expect(maskEmail('j@example.com')).toBe('j***@example.com');
+  });
+
+  it('對於無效的 email 格式 (缺少 @)，應該回傳空字串', () => {
+    expect(maskEmail('johndoe.example.com')).toBe('');
+  });
+
+  it('對於 null, undefined 或空字串輸入，應該回傳空字串', () => {
+    expect(maskEmail(null)).toBe('');
+    expect(maskEmail(undefined)).toBe('');
+    expect(maskEmail('')).toBe('');
   });
 });

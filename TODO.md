@@ -24,7 +24,7 @@
 
 ## Phase 3: 測試與品質保證 (Testing & QA)
 
-- [ ] 為 `packages/utils` 中的所有函式編寫單元測試。
+- [x] 為 `packages/utils` 中的所有函式編寫單元測試。
 - [x] 為 `packages/ui` 中的核心元件編寫單元測試。
 - [x] 為後端 API 的核心業務邏輯 (e.g., 驗證服務) 編寫單元測試。
 - [ ] 為後端 API 端點編寫整合測試 (e.g., using Supertest)，驗證完整的請求-回應流程。

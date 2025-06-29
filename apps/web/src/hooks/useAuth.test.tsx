@@ -2,19 +2,8 @@ import { renderHook, act } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { SWRConfig } from 'swr';
 import { useLogin } from './useAuth';
-import { sender, ApiError } from '@/lib/api';
+import * as api from '@/lib/api';
 import type { AuthResponse } from '@types';
-
-// 模擬整個 @/lib/api 模組
-vi.mock('@/lib/api', async importOriginal => {
-  // 保留原始模組的所有匯出 (例如 ApiError class)
-  const actual = await importOriginal<typeof import('@/lib/api')>();
-  return {
-    ...actual,
-    // 只模擬 sender 函式，以便在測試中控制其行為
-    sender: vi.fn(),
-  };
-});
 
 describe('useLogin Hook', () => {
   // 建立一個 wrapper，提供 SWR 所需的 context
@@ -41,13 +30,14 @@ describe('useLogin Hook', () => {
 
   beforeEach(() => {
     // 在每個測試案例開始前，重置所有模擬
-    vi.resetAllMocks();
+    // 使用 restoreAllMocks 來確保 spyOn 建立的模擬在測試後能還原
+    vi.restoreAllMocks();
   });
 
   it('應該在成功登入時觸發 mutation 並返回資料', async () => {
     // 安排 (Arrange)
-    const mockedSender = vi
-      .mocked(sender)
+    const senderSpy = vi
+      .spyOn(api, 'sender')
       .mockResolvedValue(mockSuccessResponse);
     const { result } = renderHook(() => useLogin(), { wrapper });
     expect(result.current.isLoggingIn).toBe(false); // 驗證初始狀態
@@ -62,15 +52,15 @@ describe('useLogin Hook', () => {
     // 驗證最終狀態
     expect(result.current.isLoggingIn).toBe(false);
     expect(result.current.loginError).toBeUndefined();
-    expect(mockedSender).toHaveBeenCalledWith('/auth/login', {
+    expect(senderSpy).toHaveBeenCalledWith('/auth/login', {
       arg: mockLoginCredentials,
     });
   });
 
   it('應該在登入失敗時處理錯誤狀態', async () => {
     // 安排 (Arrange)
-    const mockError = new ApiError(401, '電子郵件或密碼不正確');
-    const mockedSender = vi.mocked(sender).mockRejectedValue(mockError);
+    const mockError = new api.ApiError(401, '電子郵件或密碼不正確');
+    const senderSpy = vi.spyOn(api, 'sender').mockRejectedValue(mockError);
     const { result } = renderHook(() => useLogin(), { wrapper });
     expect(result.current.isLoggingIn).toBe(false); // 驗證初始狀態
 
@@ -85,7 +75,7 @@ describe('useLogin Hook', () => {
     // 驗證最終狀態
     expect(result.current.isLoggingIn).toBe(false);
     expect(result.current.loginError).toBe(mockError);
-    expect(mockedSender).toHaveBeenCalledWith('/auth/login', {
+    expect(senderSpy).toHaveBeenCalledWith('/auth/login', {
       arg: mockLoginCredentials,
     });
   });

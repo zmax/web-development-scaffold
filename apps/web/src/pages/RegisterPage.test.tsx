@@ -1,12 +1,12 @@
-import { render, screen, waitFor } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { render, screen, waitFor, cleanup } from '@testing-library/react';
+import userEvent, { type UserEvent } from '@testing-library/user-event';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { MemoryRouter, useNavigate } from 'react-router-dom';
 import { RegisterPage } from './RegisterPage';
 import * as AuthHooks from '@/hooks/useAuth';
 import { useAuthStore } from '@/stores';
 import type { AuthResponse } from '@types';
-import type { ApiError } from '@/lib/api';
+import { ApiError } from '@/lib/api';
 
 // 模擬整個 @/hooks/useAuth 模組
 vi.mock('@/hooks/useAuth', async importOriginal => {
@@ -35,6 +35,7 @@ describe('RegisterPage', () => {
   const mockNavigate = vi.fn();
   const mockSetAuth = vi.fn();
   const mockedUseRegister = vi.mocked(AuthHooks.useRegister);
+  let user: UserEvent;
 
   beforeEach(() => {
     vi.resetAllMocks();
@@ -48,6 +49,12 @@ describe('RegisterPage', () => {
     (useAuthStore as vi.Mock).mockReturnValue({
       setAuth: mockSetAuth,
     });
+    user = userEvent.setup();
+  });
+
+  afterEach(() => {
+    // 在每個測試案例結束後清理 DOM，確保測試之間的獨立性
+    cleanup();
   });
 
   const renderComponent = () => {
@@ -72,7 +79,7 @@ describe('RegisterPage', () => {
   it('當提交空表單時，應該顯示驗證錯誤', async () => {
     renderComponent();
     const submitButton = screen.getByRole('button', { name: /建立帳戶/i });
-    await userEvent.click(submitButton);
+    await user.click(submitButton);
 
     // react-hook-form 的驗證是異步的
     expect(await screen.findByText('名稱為必填項')).toBeInTheDocument();
@@ -84,12 +91,12 @@ describe('RegisterPage', () => {
 
   it('當密碼不匹配時，應該顯示驗證錯誤', async () => {
     renderComponent();
-    await userEvent.type(screen.getByLabelText('名稱'), 'Test User');
-    await userEvent.type(screen.getByLabelText('電子郵件'), 'test@example.com');
-    await userEvent.type(screen.getByLabelText('密碼'), 'password123');
-    await userEvent.type(screen.getByLabelText('確認密碼'), 'password456');
+    await user.type(screen.getByLabelText('名稱'), 'Test User');
+    await user.type(screen.getByLabelText('電子郵件'), 'test@example.com');
+    await user.type(screen.getByLabelText('密碼'), 'password123');
+    await user.type(screen.getByLabelText('確認密碼'), 'password456');
 
-    await userEvent.click(screen.getByRole('button', { name: /建立帳戶/i }));
+    await user.click(screen.getByRole('button', { name: /建立帳戶/i }));
 
     expect(await screen.findByText('兩次輸入的密碼不一致')).toBeInTheDocument();
   });
@@ -102,12 +109,12 @@ describe('RegisterPage', () => {
       password: 'password123',
     };
 
-    await userEvent.type(screen.getByLabelText('名稱'), userData.name);
-    await userEvent.type(screen.getByLabelText('電子郵件'), userData.email);
-    await userEvent.type(screen.getByLabelText('密碼'), userData.password);
-    await userEvent.type(screen.getByLabelText('確認密碼'), userData.password);
+    await user.type(screen.getByLabelText('名稱'), userData.name);
+    await user.type(screen.getByLabelText('電子郵件'), userData.email);
+    await user.type(screen.getByLabelText('密碼'), userData.password);
+    await user.type(screen.getByLabelText('確認密碼'), userData.password);
 
-    await userEvent.click(screen.getByRole('button', { name: /建立帳戶/i }));
+    await user.click(screen.getByRole('button', { name: /建立帳戶/i }));
 
     await waitFor(() => {
       expect(mockRegisterUser).toHaveBeenCalledTimes(1);
@@ -150,11 +157,11 @@ describe('RegisterPage', () => {
     renderComponent();
 
     // Act
-    await userEvent.type(screen.getByLabelText('名稱'), 'Test User');
-    await userEvent.type(screen.getByLabelText('電子郵件'), 'test@example.com');
-    await userEvent.type(screen.getByLabelText('密碼'), 'password123');
-    await userEvent.type(screen.getByLabelText('確認密碼'), 'password123');
-    await userEvent.click(screen.getByRole('button', { name: /建立帳戶/i }));
+    await user.type(screen.getByLabelText('名稱'), 'Test User');
+    await user.type(screen.getByLabelText('電子郵件'), 'test@example.com');
+    await user.type(screen.getByLabelText('密碼'), 'password123');
+    await user.type(screen.getByLabelText('確認密碼'), 'password123');
+    await user.click(screen.getByRole('button', { name: /建立帳戶/i }));
 
     // Assert
     await waitFor(() => {
@@ -171,7 +178,7 @@ describe('RegisterPage', () => {
 
   it('當 API 返回錯誤時，應該顯示錯誤訊息', async () => {
     // Arrange
-    const mockError = { message: '此電子郵件已被註冊' } as ApiError;
+    const mockError = new ApiError(409, '此電子郵件已被註冊');
     mockedUseRegister.mockReturnValue({
       registerUser: mockRegisterUser,
       isRegistering: false,

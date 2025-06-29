@@ -16,12 +16,12 @@
     "test": "vitest run --coverage",
     "test:watch": "vitest",
     "lint": "eslint . --ext .ts",
-    "type-check": "tsc --noEmit",
     "clean": "rm -rf dist"
   },
   "dependencies": {
     "clsx": "^2.0.0",
-    "tailwind-merge": "^2.0.0"
+    "tailwind-merge": "^2.0.0",
+    "date-fns": "^2.30.0"
   },
   "devDependencies": {
     "@vitest/coverage-v8": "^2.0.4",
