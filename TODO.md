@@ -1,6 +1,6 @@
 # 專案開發待辦事項 (TODO)
 
-本文件用於追蹤 `my-web-scaffold` 專案的開發進度。
+本文件用於追蹤 `axiom` 專案的開發進度。
 
 ## Phase 1: 後端 API 基礎建設 (Backend API Foundation)
 

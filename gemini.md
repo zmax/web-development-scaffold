@@ -6,7 +6,7 @@
 
 本專案是一個採用 **Monorepo** 架構的現代網頁應用，主要由以下部分組成：
 
-- **前端 (Frontend)**: 使用 **Next.js** 框架，負責使用者介面和客戶端邏輯。
+- **前端 (Frontend)**: 使用 **Vite + React**，負責使用者介面和客戶端邏輯。
 - **後端 (Backend)**: 使用 **Node.js** (建議搭配 Express.js 或 Fastify)，提供 RESTful API 服務。
 - **共享套件 (Packages)**: 存放跨專案共享的程式碼，如 `types`, `utils` 等。
 
@@ -14,17 +14,14 @@
 
 ## 2. 技術慣例
 
-### 前端 (Next.js)
+### 前端 (Vite + React)
 
-- **路由 (Routing)**: 優先使用 Next.js 的 **App Router** (`app/` 目錄)。
+- **路由 (Routing)**: 使用 **React Router** (`react-router-dom`) 進行客戶端路由管理。
 - **元件 (Components)**:
   - 遵循**原子設計 (Atomic Design)** 原則，將可重用元件放在 `packages/ui` 中。
   - 頁面級或特定功能的元件則存放在 `apps/web/src/components`。
-  - 盡可能使用 **Server Components** 以提升效能。
 - **資料獲取 (Data Fetching)**:
-  - 靜態頁面使用 `generateStaticParams`。
-  - 伺服器端渲染 (SSR) 或需要動態資料的頁面，在 Server Components 中直接使用 `async/await`。
-  - 客戶端資料獲取建議使用 `SWR` 或 `React Query`。
+  - 推薦使用 **SWR** (專案已整合) 或 `React Query` 來處理客戶端的 API 請求、快取和狀態同步。
 - **狀態管理 (State Management)**:
   - 優先使用 React 內建的 `useState`, `useContext`, `useReducer`。
   - 對於複雜的全域狀態，優先考慮使用 **Zustand**，其次是 Redux Toolkit。

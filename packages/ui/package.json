@@ -1,5 +1,5 @@
 {
-  "name": "@my-web-scaffold/ui",
+  "name": "@axiom/ui",
   "version": "1.0.0",
   "private": true,
   "type": "module",
@@ -20,8 +20,8 @@
     "react": "^18.2.0"
   },
   "dependencies": {
-    "@my-web-scaffold/utils": "workspace:*",
-    "@my-web-scaffold/types": "workspace:*"
+    "@axiom/utils": "workspace:*",
+    "@axiom/types": "workspace:*"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^6.1.5",

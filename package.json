@@ -1,6 +1,7 @@
 {
-  "name": "web-development-scaffold",
+  "name": "axiom",
   "version": "1.0.0",
+  "description": "A modern web development scaffold, built on proven principles (axioms) for quality and efficiency.",
   "private": true,
   "type": "module",
   "scripts": {

@@ -20,9 +20,9 @@
     "zod": "^3.23.8",
     "@hookform/resolvers": "^3.9.0",
     "react-hook-form": "^7.52.1",
-    "@my-web-scaffold/ui": "workspace:*",
-    "@my-web-scaffold/utils": "workspace:*",
-    "@my-web-scaffold/types": "workspace:*"
+    "@axiom/ui": "workspace:*",
+    "@axiom/utils": "workspace:*",
+    "@axiom/types": "workspace:*"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^6.1.5",

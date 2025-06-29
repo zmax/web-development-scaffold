@@ -1,5 +1,5 @@
 {
-  "name": "@my-web-scaffold/utils",
+  "name": "@axiom/utils",
   "version": "1.0.0",
   "private": true,
   "type": "module",

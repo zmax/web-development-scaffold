@@ -21,7 +21,7 @@
     "express": "^4.18.2",
     "jsonwebtoken": "^9.0.2",
     "@prisma/client": "^5.17.0",
-    "@my-web-scaffold/types": "workspace:*"
+    "@axiom/types": "workspace:*"
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.6",
