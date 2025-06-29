@@ -1,28 +1,32 @@
 import { create } from 'zustand';
-import { User } from '@types/index';
+import { persist, createJSONStorage } from 'zustand/middleware';
+import type { UserProfile } from '@types';
 
+// 定義狀態的型別
 interface AuthState {
-  user: User | null;
-  token: string | null;
   isAuthenticated: boolean;
-  login: (user: User, token: string) => void;
+  user: UserProfile | null;
+  token: string | null;
+  setAuth: (user: UserProfile, token: string) => void;
   logout: () => void;
-  setUser: (user: User) => void;
 }
 
-export const useAuthStore = create<AuthState>(set => ({
-  user: null,
-  token: null,
-  isAuthenticated: false,
-  login: (user, token) => {
-    // 在實際應用中，您可能會在這裡將 token 存儲到 localStorage
-    set({ user, token, isAuthenticated: true });
-  },
-  logout: () => {
-    // 在實際應用中，您可能會在這裡從 localStorage 清除 token
-    set({ user: null, token: null, isAuthenticated: false });
-  },
-  setUser: user => {
-    set({ user });
-  },
-}));
+// 使用 Zustand 建立 store
+export const useAuthStore = create<AuthState>()(
+  // 使用 persist 中介軟體將狀態儲存到 localStorage
+  persist(
+    set => ({
+      isAuthenticated: false,
+      user: null,
+      token: null,
+      // 登入或註冊成功後，設定驗證狀態
+      setAuth: (user, token) => set({ isAuthenticated: true, user, token }),
+      // 登出時，重設為初始狀態
+      logout: () => set({ isAuthenticated: false, user: null, token: null }),
+    }),
+    {
+      name: 'auth-storage', // localStorage 中的 key
+      storage: createJSONStorage(() => localStorage), // 指定使用 localStorage
+    }
+  )
+);

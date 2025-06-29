@@ -7,7 +7,7 @@ export const HomePage = () => {
 
   return (
     <div className='flex flex-col items-center justify-center min-h-screen text-center p-4'>
-      <h1 className='text-4xl font-bold mb-4'>歡迎來到 My Web Scaffold</h1>
+      <h1 className='text-4xl font-bold mb-4'>Welcome to Web Scaffold</h1>
       {isAuthenticated && user ? (
         <div>
           <p className='text-xl mb-4'>你好, {user.name}!</p>

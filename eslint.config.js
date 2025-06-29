@@ -7,7 +7,7 @@ import globals from 'globals';
 export default tseslint.config(
   // 全域忽略
   {
-    ignores: ['**/dist/**', '**/node_modules/**'],
+    ignores: ['**/dist/**', '**/node_modules/**', '**/coverage/**'],
   },
 
   // 推薦的基礎設定 (包含 ESLint 核心和 TypeScript 規則)
@@ -40,6 +40,19 @@ export default tseslint.config(
       react: {
         version: 'detect',
       },
+    },
+  },
+
+  // Node.js (API) 專屬設定
+  {
+    files: ['apps/api/**/*.ts'],
+    languageOptions: {
+      globals: {
+        ...globals.node,
+      },
+    },
+    rules: {
+      // 您可以在此處添加任何 Node.js 特有的規則
     },
   },
 

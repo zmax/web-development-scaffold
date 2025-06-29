@@ -1,28 +1,27 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
+import { UnauthorizedError } from '../lib/errors';
 
-export interface AuthRequest extends Request {
-  userId?: string;
-}
+const JWT_SECRET = process.env.JWT_SECRET || 'your-super-secret-key';
 
 export const authMiddleware = (
-  req: AuthRequest,
+  req: Request,
   res: Response,
   next: NextFunction
 ) => {
-  const token = req.headers.authorization?.split(' ')[1];
-  if (!token) {
-    return res.status(401).json({ message: 'Access denied' });
+  const authHeader = req.headers.authorization;
+
+  if (!authHeader || !authHeader.startsWith('Bearer ')) {
+    return next(new UnauthorizedError('未提供或格式不正確的 token'));
   }
 
+  const token = authHeader.split(' ')[1];
+
   try {
-    const decoded = jwt.verify(
-      token,
-      process.env.JWT_SECRET || 'your_jwt_secret'
-    ) as { userId: string };
-    req.userId = decoded.userId;
+    const decoded = jwt.verify(token, JWT_SECRET) as { id: string };
+    req.user = { id: decoded.id };
     next();
   } catch (error) {
-    res.status(400).json({ message: 'Invalid token' });
+    next(new UnauthorizedError('無效或過期的 token'));
   }
 };

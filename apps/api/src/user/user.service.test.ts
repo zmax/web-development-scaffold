@@ -1,12 +1,12 @@
-import { describe, it, expect, beforeEach } from 'vitest';
-import { mockDeep, mockReset } from 'vitest-mock-extended';
-import { PrismaClient } from '@prisma/client';
+import { describe, it, expect, beforeEach, vi } from 'vitest';
+import { mockReset } from 'vitest-mock-extended';
+import { prismaMock } from '../test/setup';
 import * as userService from './user.service';
-
-const prismaMock = mockDeep<PrismaClient>();
+import { NotFoundError } from '../lib/errors';
 
 describe('User Service', () => {
   beforeEach(() => {
+    vi.resetAllMocks();
     mockReset(prismaMock);
   });
 
@@ -25,10 +25,7 @@ describe('User Service', () => {
 
       prismaMock.user.findUnique.mockResolvedValue(user);
 
-      const result = await userService.getUserById(
-        user.id,
-        prismaMock as unknown as PrismaClient
-      );
+      const result = await userService.getUserById(user.id);
 
       expect(prismaMock.user.findUnique).toHaveBeenCalledWith({
         where: { id: user.id },
@@ -36,12 +33,19 @@ describe('User Service', () => {
       expect(result).toEqual(userWithoutPassword);
     });
 
-    it('should throw an error if user is not found', async () => {
+    it('如果找不到使用者，應該拋出 NotFoundError', async () => {
       prismaMock.user.findUnique.mockResolvedValue(null);
 
-      await expect(
-        userService.getUserById('1', prismaMock as unknown as PrismaClient)
-      ).rejects.toThrow('User not found');
+      await expect(userService.getUserById('non-existent-id')).rejects.toThrow(
+        NotFoundError
+      );
+    });
+
+    it('當資料庫查詢失敗時，應該拋出錯誤', async () => {
+      const dbError = new Error('Database query failed');
+      prismaMock.user.findUnique.mockRejectedValue(dbError);
+
+      await expect(userService.getUserById('any-id')).rejects.toThrow(dbError);
     });
   });
 });

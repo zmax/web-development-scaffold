@@ -1,6 +1,11 @@
+import { type ClassValue, clsx } from 'clsx';
+import { twMerge } from 'tailwind-merge';
+
 /**
- * Utility function to combine class names
+ * 合併 Tailwind CSS 類名，並解決衝突。
+ * @param inputs - 要合併的類名，可以是字串、陣列或物件。
+ * @returns 合併後的類名
  */
-export function cn(...classes: (string | undefined | null | false)[]): string {
-  return classes.filter(Boolean).join(' ');
+export function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs));
 }
