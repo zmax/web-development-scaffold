@@ -1,6 +1,6 @@
 import type { User } from '@prisma/client';
-import prisma from '../lib/prisma';
-import { NotFoundError } from '../lib/errors';
+import prisma from '../lib/prisma.js';
+import { NotFoundError } from '../lib/errors.js';
 
 /**
  * 根據使用者 ID 獲取使用者資訊，並移除密碼欄位

@@ -15,8 +15,12 @@ import {
 
 export const LoginPage = () => {
   const navigate = useNavigate();
-  const { setAuth, isAuthenticated } = useAuthStore();
-  const { login, isLoggingIn, loginError } = useLogin();
+  const { isAuthenticated } = useAuthStore();
+  const {
+    mutateAsync: login,
+    isPending: isLoggingIn,
+    error: loginError,
+  } = useLogin();
 
   // 如果已經登入，直接導向個人資料頁
   useEffect(() => {
@@ -32,13 +36,10 @@ export const LoginPage = () => {
     const password = formData.get('password') as string;
 
     try {
-      const data = await login({ email, password });
-      if (data) {
-        setAuth(data.user, data.token);
-        navigate('/profile', { replace: true });
-      }
+      await login({ email, password });
+      navigate('/profile', { replace: true });
     } catch (error) {
-      // 錯誤將由 loginError state 處理，這裡可以留空或做額外日誌記錄
+      // 錯誤將由 loginError state 處理，這裡���以留空或做額外日誌記錄
       console.error('登入失敗:', error);
     }
   };

@@ -1,8 +1,8 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { mockReset } from 'vitest-mock-extended';
-import { prismaMock } from '../test/setup';
-import * as userService from './user.service';
-import { NotFoundError } from '../lib/errors';
+import { prismaMock } from '../test/setup.js';
+import * as userService from './user.service.js';
+import { NotFoundError } from '../lib/errors.js';
 
 describe('User Service', () => {
   beforeEach(() => {

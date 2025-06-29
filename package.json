@@ -6,7 +6,8 @@
   "type": "module",
   "scripts": {
     "build": "pnpm -r build",
-    "dev": "concurrently --names \"WEB,API\" --handle-input \"pnpm:dev:web\" \"pnpm:dev:api\"",
+    "dev": "pnpm build && concurrently --names \"PACKAGES,WEB,API\" --handle-input \"pnpm:dev:packages\" \"pnpm:dev:web\" \"pnpm:dev:api\"",
+    "dev:packages": "pnpm --filter \"./packages/**\" --parallel build --watch",
     "dev:web": "pnpm --filter web dev",
     "dev:api": "pnpm --filter api dev",
     "test": "pnpm -r test",

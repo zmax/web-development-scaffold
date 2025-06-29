@@ -11,7 +11,8 @@ export default defineConfig({
     coverage: {
       provider: 'v8',
       reporter: ['text', 'json', 'html'],
-      include: ['src/services/**/*.ts', 'src/utils/**/*.ts'],
+      // 包含 src 目錄下的所有 .ts 檔案
+      include: ['src/**/*.ts'],
       exclude: [
         'src/index.ts',
         'src/test/**',

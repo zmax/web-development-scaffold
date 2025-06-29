@@ -1,21 +1,20 @@
-import useSWR from 'swr';
-import { fetcher } from '@/lib/api';
-import { useAuthStore } from '@/stores';
-import type { UserProfile } from '@types';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { sender } from '@/lib/api';
+import type { UserProfile } from '@axiom/types';
 
-/**
- * 獲取當前登入使用者資料的 SWR Hook
- *
- * @returns {object} 包含使用者資料、載入狀態和錯誤資訊的物件
- */
-export const useUser = () => {
-  const { isAuthenticated } = useAuthStore();
+export interface UpdateUserDto {
+  name?: string;
+  email?: string;
+}
 
-  // 只有在使用者通過驗證時才發出請求
-  const { data, error, isLoading } = useSWR<UserProfile>(
-    isAuthenticated ? '/users/me' : null,
-    fetcher
-  );
+export const useUpdateUser = () => {
+  const queryClient = useQueryClient();
 
-  return { user: data, isLoading, error };
+  return useMutation<UserProfile, Error, UpdateUserDto>({
+    mutationFn: (userData: UpdateUserDto) =>
+      sender<UserProfile>('/user/profile', { arg: userData }),
+    onSuccess: (updatedUser: UserProfile) => {
+      queryClient.setQueryData(['user'], updatedUser);
+    },
+  });
 };

@@ -1,11 +1,14 @@
 import { Router, Request, Response, NextFunction } from 'express';
-import * as authService from './auth.service';
+import * as authService from './auth.service.js';
+import { validate } from '../middleware/validation.middleware.js';
+import { LoginUserSchema, RegisterUserSchema } from '@axiom/types';
 
 const router = Router();
 
 // POST /api/v1/auth/register
 router.post(
   '/register',
+  validate(RegisterUserSchema),
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { user, token } = await authService.register(req.body);
@@ -19,6 +22,7 @@ router.post(
 // POST /api/v1/auth/login
 router.post(
   '/login',
+  validate(LoginUserSchema),
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { user, token } = await authService.login(req.body);

@@ -5,16 +5,17 @@
     "rootDir": "./src",
     "declaration": true,
     "declarationMap": true,
-    "composite": true
+    "composite": true,
+    "noEmit": false
   },
   "include": ["src/**/*"],
   "exclude": ["dist", "node_modules"],
   "references": [
     {
-      "path": "../utils"
+      "path": "../utils/tsconfig.json"
     },
     {
-      "path": "../types"
+      "path": "../types/tsconfig.json"
     }
   ]
 }

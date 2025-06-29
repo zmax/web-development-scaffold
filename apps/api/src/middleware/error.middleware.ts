@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
-import { HttpError } from '../lib/errors';
+import { HttpError } from '../lib/errors.js';
+import logger from '../lib/logger.js';
 
 export const errorHandler = (
   err: Error,
@@ -8,7 +9,18 @@ export const errorHandler = (
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   next: NextFunction
 ) => {
-  console.error(err);
+  logger.error(
+    {
+      err,
+      request: {
+        method: req.method,
+        url: req.url,
+        body: req.body,
+        ip: req.ip,
+      },
+    },
+    'An error occurred in the application'
+  );
 
   if (err instanceof HttpError) {
     return res.status(err.statusCode).json({ message: err.message });

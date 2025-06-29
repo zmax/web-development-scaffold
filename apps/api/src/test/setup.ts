@@ -1,12 +1,17 @@
-import { vi } from 'vitest';
-import { mockDeep, type DeepMockProxy } from 'vitest-mock-extended';
+import { vi, beforeEach } from 'vitest';
+import { mockDeep, mockReset } from 'vitest-mock-extended';
 import type { PrismaClient } from '@prisma/client';
-import prisma from '../lib/prisma';
 
-// 模擬整個 ../lib/prisma 模組
-vi.mock('../lib/prisma', () => ({
+// Mock Prisma Client
+const prismaMock = mockDeep<PrismaClient>();
+
+vi.mock('../lib/prisma.js', () => ({
   __esModule: true,
-  default: mockDeep<PrismaClient>(),
+  default: prismaMock,
 }));
 
-export const prismaMock = prisma as unknown as DeepMockProxy<PrismaClient>;
+beforeEach(() => {
+  mockReset(prismaMock);
+});
+
+export { prismaMock };

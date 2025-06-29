@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
-import { UnauthorizedError } from '../lib/errors';
+import { UnauthorizedError } from '../lib/errors.js';
 
 const JWT_SECRET = process.env.JWT_SECRET || 'your-super-secret-key';
 

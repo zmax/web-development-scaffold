@@ -12,8 +12,9 @@ import {
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Link, useNavigate } from 'react-router-dom';
-import { RegisterInput, RegisterSchema, useRegister } from '@/hooks/useAuth';
+import { useRegister } from '@/hooks/useAuth';
 import { useAuthStore } from '@/stores';
+import { RegisterUserDto, RegisterUserSchema } from '@axiom/types';
 
 export function RegisterPage() {
   const navigate = useNavigate();
@@ -22,13 +23,17 @@ export function RegisterPage() {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<RegisterInput>({
-    resolver: zodResolver(RegisterSchema),
+  } = useForm<RegisterUserDto>({
+    resolver: zodResolver(RegisterUserSchema),
   });
 
-  const { registerUser, isRegistering, registerError } = useRegister();
+  const {
+    mutateAsync: registerUser,
+    isPending: isRegistering,
+    error: registerError,
+  } = useRegister();
 
-  const onSubmit = async (data: RegisterInput) => {
+  const onSubmit = async (data: RegisterUserDto) => {
     try {
       const authResponse = await registerUser(data);
       if (authResponse) {
@@ -60,7 +65,6 @@ export function RegisterPage() {
               <Input
                 id='name'
                 placeholder='Max Robinson'
-                error={!!errors.name}
                 {...register('name')}
               />
               {errors.name && (
@@ -73,7 +77,6 @@ export function RegisterPage() {
                 id='email'
                 type='email'
                 placeholder='m@example.com'
-                error={!!errors.email}
                 {...register('email')}
               />
               {errors.email && (
@@ -82,29 +85,10 @@ export function RegisterPage() {
             </div>
             <div className='grid gap-2'>
               <Label htmlFor='password'>密碼</Label>
-              <Input
-                id='password'
-                type='password'
-                error={!!errors.password}
-                {...register('password')}
-              />
+              <Input id='password' type='password' {...register('password')} />
               {errors.password && (
                 <p className='text-xs text-red-500'>
                   {errors.password.message}
-                </p>
-              )}
-            </div>
-            <div className='grid gap-2'>
-              <Label htmlFor='confirmPassword'>確認密碼</Label>
-              <Input
-                id='confirmPassword'
-                type='password'
-                error={!!errors.confirmPassword}
-                {...register('confirmPassword')}
-              />
-              {errors.confirmPassword && (
-                <p className='text-xs text-red-500'>
-                  {errors.confirmPassword.message}
                 </p>
               )}
             </div>

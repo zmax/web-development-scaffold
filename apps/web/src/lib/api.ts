@@ -31,15 +31,18 @@ export class ApiError extends Error {
  * @param url API 端點路徑
  * @param options RequestInit 選項
  */
-async function apiRequest(url: string, options: RequestInit = {}) {
+async function apiRequest<T>(
+  url: string,
+  options: RequestInit = {}
+): Promise<T> {
   const { token } = useAuthStore.getState();
-  const headers: HeadersInit = {
+  const headers = new Headers({
     'Content-Type': 'application/json',
     ...options.headers,
-  };
+  });
 
   if (token) {
-    headers['Authorization'] = `Bearer ${token}`;
+    headers.set('Authorization', `Bearer ${token}`);
   }
 
   const response = await fetch(`${API_BASE_URL}${url}`, {

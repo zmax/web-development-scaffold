@@ -1,15 +1,24 @@
+/// <reference types="vitest/globals" />
+
 import { render, screen, waitFor, cleanup } from '@testing-library/react';
 import userEvent, { type UserEvent } from '@testing-library/user-event';
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import { describe, it, expect, beforeEach, afterEach } from 'vitest';
 import { MemoryRouter, useNavigate } from 'react-router-dom';
 import { RegisterPage } from './RegisterPage';
-import * as AuthHooks from '@/hooks/useAuth';
-import { useAuthStore } from '@/stores';
-import type { AuthResponse } from '@types';
-import { ApiError } from '@/lib/api';
+import * as AuthHooks from '../hooks/useAuth';
+import { useAuthStore } from '../stores';
+import type { UseMutationResult } from '@tanstack/react-query';
+import type { AuthResponse, RegisterUserDto } from '@axiom/types';
+import { ApiError } from '../lib/api';
 
-// 模擬整個 @/hooks/useAuth 模組
-vi.mock('@/hooks/useAuth', async importOriginal => {
+type MockUseRegister = UseMutationResult<
+  AuthResponse,
+  ApiError,
+  RegisterUserDto
+>;
+
+// 模擬整個 ../hooks/useAuth 模組
+vi.mock('../hooks/useAuth', async importOriginal => {
   const actual = await importOriginal<typeof AuthHooks>();
   return {
     ...actual,
@@ -28,7 +37,7 @@ vi.mock('react-router-dom', async importOriginal => {
 });
 
 // 模擬 zustand store
-vi.mock('@/stores');
+vi.mock('../stores');
 
 describe('RegisterPage', () => {
   const mockRegisterUser = vi.fn();
@@ -41,10 +50,10 @@ describe('RegisterPage', () => {
     vi.resetAllMocks();
     // 為每個測試設定預設的模擬回傳值
     mockedUseRegister.mockReturnValue({
-      registerUser: mockRegisterUser,
-      isRegistering: false,
-      registerError: null,
-    });
+      mutateAsync: mockRegisterUser,
+      isPending: false,
+      error: null,
+    } as unknown as MockUseRegister);
     (useNavigate as vi.Mock).mockReturnValue(mockNavigate);
     (useAuthStore as vi.Mock).mockReturnValue({
       setAuth: mockSetAuth,
@@ -70,7 +79,6 @@ describe('RegisterPage', () => {
     expect(screen.getByLabelText('名稱')).toBeInTheDocument();
     expect(screen.getByLabelText('電子郵件')).toBeInTheDocument();
     expect(screen.getByLabelText('密碼')).toBeInTheDocument();
-    expect(screen.getByLabelText('確認密碼')).toBeInTheDocument();
     expect(
       screen.getByRole('button', { name: /建立帳戶/i })
     ).toBeInTheDocument();
@@ -82,23 +90,15 @@ describe('RegisterPage', () => {
     await user.click(submitButton);
 
     // react-hook-form 的驗證是異步的
-    expect(await screen.findByText('名稱為必填項')).toBeInTheDocument();
-    expect(await screen.findByText('請輸入有效的電子郵件')).toBeInTheDocument();
     expect(
-      await screen.findByText('密碼至少需要 6 個字元')
+      await screen.findByText('名稱至少需要 2 個字元')
     ).toBeInTheDocument();
-  });
-
-  it('當密碼不匹配時，應該顯示驗證錯誤', async () => {
-    renderComponent();
-    await user.type(screen.getByLabelText('名稱'), 'Test User');
-    await user.type(screen.getByLabelText('電子郵件'), 'test@example.com');
-    await user.type(screen.getByLabelText('密碼'), 'password123');
-    await user.type(screen.getByLabelText('確認密碼'), 'password456');
-
-    await user.click(screen.getByRole('button', { name: /建立帳戶/i }));
-
-    expect(await screen.findByText('兩次輸入的密碼不一致')).toBeInTheDocument();
+    expect(
+      await screen.findByText('請輸入有效的電子郵件地址')
+    ).toBeInTheDocument();
+    expect(
+      await screen.findByText('密碼至少需要 8 個字元')
+    ).toBeInTheDocument();
   });
 
   it('當提交有效資料時，應該呼叫 registerUser', async () => {
@@ -112,7 +112,6 @@ describe('RegisterPage', () => {
     await user.type(screen.getByLabelText('名稱'), userData.name);
     await user.type(screen.getByLabelText('電子郵件'), userData.email);
     await user.type(screen.getByLabelText('密碼'), userData.password);
-    await user.type(screen.getByLabelText('確認密碼'), userData.password);
 
     await user.click(screen.getByRole('button', { name: /建立帳戶/i }));
 
@@ -120,18 +119,17 @@ describe('RegisterPage', () => {
       expect(mockRegisterUser).toHaveBeenCalledTimes(1);
       expect(mockRegisterUser).toHaveBeenCalledWith({
         ...userData,
-        confirmPassword: userData.password,
       });
     });
   });
 
-  it('當 isRegistering 為 true 時，應該禁用按鈕並顯示載入文字', () => {
+  it('當 isPending 為 true 時，應該禁用按鈕並顯示載入文字', () => {
     // 為此測試覆寫預設的模擬
     mockedUseRegister.mockReturnValue({
-      registerUser: mockRegisterUser,
-      isRegistering: true,
-      registerError: null,
-    });
+      mutateAsync: mockRegisterUser,
+      isPending: true,
+      error: null,
+    } as unknown as MockUseRegister);
 
     renderComponent();
 
@@ -148,8 +146,8 @@ describe('RegisterPage', () => {
         id: 'user-1',
         name: 'Test User',
         email: 'test@example.com',
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
+        createdAt: new Date(),
+        updatedAt: new Date(),
       },
     };
     mockRegisterUser.mockResolvedValue(mockAuthResponse);
@@ -160,7 +158,6 @@ describe('RegisterPage', () => {
     await user.type(screen.getByLabelText('名稱'), 'Test User');
     await user.type(screen.getByLabelText('電子郵件'), 'test@example.com');
     await user.type(screen.getByLabelText('密碼'), 'password123');
-    await user.type(screen.getByLabelText('確認密碼'), 'password123');
     await user.click(screen.getByRole('button', { name: /建立帳戶/i }));
 
     // Assert
@@ -180,10 +177,10 @@ describe('RegisterPage', () => {
     // Arrange
     const mockError = new ApiError(409, '此電子郵件已被註冊');
     mockedUseRegister.mockReturnValue({
-      registerUser: mockRegisterUser,
-      isRegistering: false,
-      registerError: mockError,
-    });
+      mutateAsync: mockRegisterUser,
+      isPending: false,
+      error: mockError,
+    } as unknown as MockUseRegister);
 
     renderComponent();
 

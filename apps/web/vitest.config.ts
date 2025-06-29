@@ -1,15 +1,31 @@
 import { defineConfig } from 'vitest/config';
 import react from '@vitejs/plugin-react';
 import tsconfigPaths from 'vite-tsconfig-paths';
+import { EsLinter, linterPlugin } from 'vite-plugin-linter';
 
-export default defineConfig({
-  plugins: [react(), tsconfigPaths()],
+export default defineConfig(({ mode }) => ({
+  plugins: [
+    react(),
+    tsconfigPaths(),
+    // Only run linter in development
+    mode !== 'test' &&
+      linterPlugin({
+        include: ['./src/**/*.{ts,tsx}'],
+        linters: [
+          new EsLinter({
+            configEnv: {
+              mode: 'development',
+              command: 'serve',
+              ssrBuild: false,
+            },
+          }),
+        ],
+      }),
+  ],
   test: {
-    // 建議改為 false，並在測試檔案中明確匯入，以獲得更好的靜態分析
-    globals: false,
+    globals: true,
     environment: 'jsdom',
     setupFiles: './src/test/setup.ts',
-    // 如果您的元件有匯入 CSS 檔案，請啟用此選項
     css: true,
     coverage: {
       provider: 'v8',
@@ -23,4 +39,4 @@ export default defineConfig({
       ],
     },
   },
-});
+}));
