@@ -79,8 +79,9 @@ graph TD
     P1 -- "依賴" --> P2
     P1 -- "依賴" --> P3
 
-    classDef app fill:#B4E4D8,stroke:#333,stroke-width:2px;
-    classDef pkg fill:#F5D4A7,stroke:#333,stroke-width:2px;
+    %% 定義節點樣式：選用低飽和度的莫蘭迪色系，並確保文字顏色 #333 以維持對比度
+    classDef app fill:#a9c4b3,stroke:#333,stroke-width:2px,color:#333;
+    classDef pkg fill:#d3baba,stroke:#333,stroke-width:2px,color:#333;
 ```
 
 - **`apps/web`**: 前端應用，依賴 `ui`（元件）、`utils`（工具）和 `types`（型別）。
