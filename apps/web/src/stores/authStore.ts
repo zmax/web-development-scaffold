@@ -1,28 +1,31 @@
 import { create } from 'zustand';
-import { User } from '@types/index';
+import { persist } from 'zustand/middleware';
+import type { UserProfile } from '@axiom/types';
 
 interface AuthState {
-  user: User | null;
+  user: UserProfile | null;
   token: string | null;
   isAuthenticated: boolean;
-  login: (user: User, token: string) => void;
+  setAuth: (user: UserProfile, token: string) => void;
+  clearAuth: () => void;
   logout: () => void;
-  setUser: (user: User) => void;
 }
 
-export const useAuthStore = create<AuthState>(set => ({
-  user: null,
-  token: null,
-  isAuthenticated: false,
-  login: (user, token) => {
-    // 在實際應用中，您可能會在這裡將 token 存儲到 localStorage
-    set({ user, token, isAuthenticated: true });
-  },
-  logout: () => {
-    // 在實際應用中，您可能會在這裡從 localStorage 清除 token
-    set({ user: null, token: null, isAuthenticated: false });
-  },
-  setUser: user => {
-    set({ user });
-  },
-}));
+export const useAuthStore = create<AuthState>()(
+  persist(
+    (set, get) => ({
+      user: null,
+      token: null,
+      isAuthenticated: false,
+      setAuth: (user, token) => set({ user, token, isAuthenticated: true }),
+      clearAuth: () => set({ user: null, token: null, isAuthenticated: false }),
+      logout: () => {
+        get().clearAuth();
+        // You might want to clear other caches or redirect here
+      },
+    }),
+    {
+      name: 'auth-storage', // local storage 中的 key
+    }
+  )
+);

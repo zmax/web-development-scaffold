@@ -1,10 +1,8 @@
 import { Router, Request, Response, NextFunction } from 'express';
-import { PrismaClient } from '@prisma/client';
-import * as userService from './user.service';
-import { authMiddleware } from '../middleware/auth.middleware';
+import * as userService from './user.service.js';
+import { authMiddleware } from '../middleware/auth.middleware.js';
 
 const router = Router();
-const prisma = new PrismaClient();
 
 // GET /api/v1/users/me - 獲取當前登入使用者的資訊
 router.get(
@@ -18,7 +16,7 @@ router.get(
     }
 
     try {
-      const user = await userService.getUserById(req.user.id, prisma);
+      const user = await userService.getUserById(req.user.id);
       res.json(user);
     } catch (error) {
       next(error);

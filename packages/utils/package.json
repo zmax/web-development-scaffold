@@ -1,12 +1,32 @@
 {
-  "name": "@workspace/utils",
+  "name": "@axiom/utils",
   "version": "1.0.0",
   "private": true,
-  "main": "./src/index.ts",
-  "types": "./src/index.ts",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
   "scripts": {
     "build": "tsc",
-    "type-check": "tsc --noEmit",
+    "test": "vitest run --coverage",
+    "test:watch": "vitest",
+    "lint": "eslint . --ext .ts",
     "clean": "rm -rf dist"
+  },
+  "dependencies": {
+    "clsx": "^2.0.0",
+    "date-fns": "^2.30.0",
+    "tailwind-merge": "^2.0.0"
+  },
+  "devDependencies": {
+    "@types/react": "^18.3.23",
+    "@vitest/coverage-v8": "^2.0.4",
+    "typescript": "^5.3.2",
+    "vitest": "^2.1.9"
   }
 }

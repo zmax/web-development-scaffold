@@ -1,13 +1,12 @@
 import tseslint from 'typescript-eslint';
-import react from 'eslint-plugin-react';
-import reactHooks from 'eslint-plugin-react-hooks';
+import eslintReact from '@eslint-react/eslint-plugin';
 import prettier from 'eslint-config-prettier';
 import globals from 'globals';
 
 export default tseslint.config(
   // 全域忽略
   {
-    ignores: ['**/dist/**', '**/node_modules/**'],
+    ignores: ['**/dist/**', '**/node_modules/**', '**/coverage/**'],
   },
 
   // 推薦的基礎設定 (包含 ESLint 核心和 TypeScript 規則)
@@ -15,31 +14,22 @@ export default tseslint.config(
 
   // React 相關套件的專屬設定
   {
+    // @eslint-react 是新的、官方推薦的 React 外掛。
+    // 它取代了舊的 eslint-plugin-react 和 eslint-plugin-react-hooks。
     files: ['apps/web/**/*.{ts,tsx}', 'packages/ui/**/*.{ts,tsx}'],
-    plugins: {
-      react,
-      'react-hooks': reactHooks,
-    },
+    ...eslintReact.configs.recommended,
+  },
+
+  // Node.js (API) 專屬設定
+  {
+    files: ['apps/api/**/*.ts'],
     languageOptions: {
-      parserOptions: {
-        ecmaFeatures: {
-          jsx: true,
-        },
-      },
       globals: {
-        ...globals.browser,
+        ...globals.node,
       },
     },
     rules: {
-      ...react.configs.recommended.rules,
-      ...reactHooks.configs.recommended.rules,
-      'react/react-in-jsx-scope': 'off',
-      'react/prop-types': 'off',
-    },
-    settings: {
-      react: {
-        version: 'detect',
-      },
+      // 您可以在此處添加任何 Node.js 特有的規則
     },
   },
 

@@ -45,6 +45,9 @@ pids/
 coverage/
 *.lcov
 
+# TypeScript build info
+*.tsbuildinfo
+
 # Temp
 .tmp/
 .temp/

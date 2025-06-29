@@ -2,9 +2,11 @@ import { useAuthStore } from '@/stores';
 import { Button } from '@ui/index';
 import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
+import { useLogout } from '@/hooks/useAuth';
 
 export const ProfilePage = () => {
-  const { user, isAuthenticated, logout } = useAuthStore();
+  const { user, isAuthenticated } = useAuthStore();
+  const { logout } = useLogout();
   const navigate = useNavigate();
 
   // 這是一個簡單的路由守衛，如果未登入，則導向登入頁

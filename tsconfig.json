@@ -20,14 +20,26 @@
       "@/*": ["./apps/web/src/*"],
       "@ui/*": ["./packages/ui/src/*"],
       "@utils/*": ["./packages/utils/src/*"],
-      "@types/*": ["./packages/types/src/*"]
+      "@types/*": ["./packages/types/src/*"],
+      "@api/*": ["./apps/api/src/*"]
     }
   },
   "references": [
-    { "path": "./apps/web" },
-    { "path": "./packages/ui" },
-    { "path": "./packages/utils" },
-    { "path": "./packages/types" }
+    {
+      "path": "./apps/web"
+    },
+    {
+      "path": "./apps/api"
+    },
+    {
+      "path": "./packages/ui"
+    },
+    {
+      "path": "./packages/utils"
+    },
+    {
+      "path": "./packages/types"
+    }
   ],
   "files": []
 }
