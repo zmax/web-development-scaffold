@@ -3,7 +3,7 @@ import { z, ZodError } from 'zod';
 import { HttpError } from '../lib/errors.js';
 
 export const validate =
-  (schema: z.ZodObject<z.ZodRawShape, z.ZodTypeAny>) =>
+  (schema: z.AnyZodObject) =>
   (req: Request, res: Response, next: NextFunction) => {
     try {
       schema.parse(req.body);
