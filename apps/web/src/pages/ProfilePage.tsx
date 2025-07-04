@@ -1,27 +1,26 @@
-import { useAuthStore } from '@/stores';
+import { useAuthStore } from '@/stores/authStore';
 import { Button } from '@ui/index';
 import { useNavigate } from 'react-router-dom';
-import { useEffect } from 'react';
+// import { useEffect } from 'react';
 import { useLogout } from '@/hooks/useAuth';
 
 export const ProfilePage = () => {
-  const { user, isAuthenticated } = useAuthStore();
-  const { logout } = useLogout();
+  const { auth } = useAuthStore();
+  const logout = useLogout();
   const navigate = useNavigate();
 
-  // 這是一個簡單的路由守衛，如果未登入，則導向登入頁
-  useEffect(() => {
-    if (!isAuthenticated) {
-      navigate('/login', { replace: true });
-    }
-  }, [isAuthenticated, navigate]);
+  // const isAuthenticated = !!auth;
+  // 路由守衛邏輯已移至 ProtectedRoute，這裡可以安全地假設 auth 和 user 必定存在
+  const user = auth?.user;
 
   const handleLogout = () => {
     logout();
+    // 雖然 ProtectedRoute 會自動處理導向，但立即導航可以提供更快的反饋
+    navigate('/login');
   };
 
-  if (!isAuthenticated || !user) {
-    // 在 useEffect 重新導向之前，可以顯示載入中或直接返回 null
+  if (!user) {
+    // 雖然理論上不會發生，但作為防禦性程式碼，可以在此返回 null 或 loading 狀態
     return null;
   }
 

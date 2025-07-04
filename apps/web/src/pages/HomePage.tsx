@@ -1,9 +1,11 @@
-import { useAuthStore } from '@/stores';
+import { useAuthStore } from '@/stores/authStore';
 import { Button } from '@ui/index';
 import { Link } from 'react-router-dom';
 
 export const HomePage = () => {
-  const { isAuthenticated, user } = useAuthStore();
+  const { auth } = useAuthStore();
+  const isAuthenticated = !!auth;
+  const user = auth?.user;
 
   return (
     <div className='flex flex-col items-center justify-center min-h-screen text-center p-4'>

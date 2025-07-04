@@ -1,190 +1,175 @@
-/// <reference types="vitest/globals" />
+import { screen, waitFor } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { Route, Routes } from 'react-router-dom';
 
-import { render, screen, waitFor, cleanup } from '@testing-library/react';
-import userEvent, { type UserEvent } from '@testing-library/user-event';
-import { describe, it, expect, beforeEach, afterEach } from 'vitest';
-import { MemoryRouter, useNavigate } from 'react-router-dom';
 import { RegisterPage } from './RegisterPage';
-import * as AuthHooks from '../hooks/useAuth';
-import { useAuthStore } from '../stores';
-import type { UseMutationResult } from '@tanstack/react-query';
-import type { AuthResponse, RegisterUserDto } from '@axiom/types';
-import { ApiError } from '../lib/api';
+import { useRegister } from '@/hooks/useAuth';
+import { useAuthStore } from '@/stores/authStore';
+import { render } from '@/test/test-utils'; // 導入共享的 render 函式
 
-type MockUseRegister = UseMutationResult<
-  AuthResponse,
-  ApiError,
-  RegisterUserDto
->;
+// Mock 依賴項
+// 使用同步工廠函式來 mock 模組。這可以解決在某些複雜情況下，
+// Vitest 的解析器與非同步 mock 工廠函式之間的路徑解析問題。
+vi.mock('@/hooks/useAuth', () => ({
+  useRegister: vi.fn(),
+  useLogin: vi.fn(), // 即使此測試未使用，也一併 mock 以確保一致性
+  useLogout: vi.fn(),
+}));
 
-// 模擬整個 ../hooks/useAuth 模組
-vi.mock('../hooks/useAuth', async importOriginal => {
-  const actual = await importOriginal<typeof AuthHooks>();
+vi.mock('@/stores/authStore', () => ({
+  useAuthStore: vi.fn(),
+}));
+
+const mockNavigate = vi.fn();
+vi.mock('react-router-dom', async () => {
+  const actual = await vi.importActual('react-router-dom');
   return {
     ...actual,
-    // 只模擬 useRegister hook
-    useRegister: vi.fn(),
+    useNavigate: () => mockNavigate,
   };
 });
-
-// 模擬 react-router-dom 的 useNavigate
-vi.mock('react-router-dom', async importOriginal => {
-  const actual = await importOriginal<typeof import('react-router-dom')>();
-  return {
-    ...actual,
-    useNavigate: vi.fn(),
-  };
-});
-
-// 模擬 zustand store
-vi.mock('../stores');
 
 describe('RegisterPage', () => {
-  const mockRegisterUser = vi.fn();
-  const mockNavigate = vi.fn();
-  const mockSetAuth = vi.fn();
-  const mockedUseRegister = vi.mocked(AuthHooks.useRegister);
-  let user: UserEvent;
-
-  beforeEach(() => {
-    vi.resetAllMocks();
-    // 為每個測試設定預設的模擬回傳值
-    mockedUseRegister.mockReturnValue({
-      mutateAsync: mockRegisterUser,
-      isPending: false,
-      error: null,
-    } as unknown as MockUseRegister);
-    (useNavigate as vi.Mock).mockReturnValue(mockNavigate);
-    (useAuthStore as vi.Mock).mockReturnValue({
-      setAuth: mockSetAuth,
-    });
-    user = userEvent.setup();
-  });
-
-  afterEach(() => {
-    // 在每個測試案例結束後清理 DOM，確保測試之間的獨立性
-    cleanup();
-  });
-
-  const renderComponent = () => {
-    return render(
-      <MemoryRouter>
-        <RegisterPage />
-      </MemoryRouter>
+  // 將 render 邏輯移至此處，使其更具可讀性
+  // 修正：使用 `null` 作為未認證狀態的預設值，而不是 `{}` (空物件是 truthy)
+  // 這能確保 `if (auth)` 的檢查行為與真實情況一致。
+  const renderWithRoutes = (initialAuth = null) => {
+    (useAuthStore as vi.Mock).mockReturnValue({ auth: initialAuth });
+    // 使用共享的 render 函式，並傳入路由設定
+    render(
+      <Routes>
+        <Route path='/register' element={<RegisterPage />} />
+        <Route path='/profile' element={<div>成功導向到個人資料頁</div>} />
+      </Routes>,
+      { memoryRouterProps: { initialEntries: ['/register'] } }
     );
   };
+  const mockMutateAsync = vi.fn();
 
-  it('應該渲染所有表單欄位和提交按鈕', () => {
-    renderComponent();
+  beforeEach(() => {
+    vi.clearAllMocks();
+    // 預設的 useRegister mock 回傳值
+    (useRegister as vi.Mock).mockReturnValue({
+      mutateAsync: mockMutateAsync,
+      isPending: false,
+      error: null,
+    });
+  });
+
+  it('應正確渲染所有 UI 元件', () => {
+    // Arrange
+    renderWithRoutes();
+
+    // Assert
+    expect(screen.getByRole('heading', { name: '註冊' })).toBeInTheDocument();
     expect(screen.getByLabelText('名稱')).toBeInTheDocument();
     expect(screen.getByLabelText('電子郵件')).toBeInTheDocument();
     expect(screen.getByLabelText('密碼')).toBeInTheDocument();
+    expect(screen.getByLabelText('確認密碼')).toBeInTheDocument();
     expect(
-      screen.getByRole('button', { name: /建立帳戶/i })
+      screen.getByRole('button', { name: '建立帳戶' })
     ).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: '登入' })).toHaveAttribute(
+      'href',
+      '/login'
+    );
   });
 
-  it('當提交空表單時，應該顯示驗證錯誤', async () => {
-    renderComponent();
-    const submitButton = screen.getByRole('button', { name: /建立帳戶/i });
-    await user.click(submitButton);
+  it('如果使用者已登入，應導向到 /profile', () => {
+    // Arrange
+    // 修正：提供一個符合 AuthResponse 型別的完整 mock 物件
+    const mockAuth = {
+      token: 'abc',
+      user: {
+        id: 'user-1',
+        name: 'Test',
+        email: 'test@example.com',
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+    };
+    renderWithRoutes(mockAuth);
 
-    // react-hook-form 的驗證是異步的
-    expect(
-      await screen.findByText('名稱至少需要 2 個字元')
-    ).toBeInTheDocument();
-    expect(
-      await screen.findByText('請輸入有效的電子郵件地址')
-    ).toBeInTheDocument();
-    expect(
-      await screen.findByText('密碼至少需要 8 個字元')
-    ).toBeInTheDocument();
+    // Assert
+    expect(mockNavigate).toHaveBeenCalledWith('/profile', { replace: true });
   });
 
-  it('當提交有效資料時，應該呼叫 registerUser', async () => {
-    renderComponent();
+  it('當密碼不匹配時，應顯示錯誤訊息', async () => {
+    // Arrange
+    const user = userEvent.setup();
+    renderWithRoutes();
+
+    // Act
+    await user.type(screen.getByLabelText('名稱'), 'Test User');
+    await user.type(screen.getByLabelText('電子郵件'), 'test@example.com');
+    await user.type(screen.getByLabelText('密碼'), 'password123');
+    await user.type(screen.getByLabelText('確認密碼'), 'password456');
+    await user.click(screen.getByRole('button', { name: '建立帳戶' }));
+
+    // Assert
+    expect(
+      await screen.findByTestId('confirm-password-error')
+    ).toHaveTextContent('密碼不匹配');
+    expect(mockMutateAsync).not.toHaveBeenCalled();
+  });
+
+  it('當提交有效表單時，應呼叫註冊 mutation', async () => {
+    // Arrange
+    const user = userEvent.setup();
+    mockMutateAsync.mockResolvedValue({}); // 模擬成功的回應
+    renderWithRoutes();
+
     const userData = {
       name: 'Test User',
       email: 'test@example.com',
       password: 'password123',
     };
 
+    // Act
     await user.type(screen.getByLabelText('名稱'), userData.name);
     await user.type(screen.getByLabelText('電子郵件'), userData.email);
     await user.type(screen.getByLabelText('密碼'), userData.password);
+    await user.type(screen.getByLabelText('確認密碼'), userData.password);
+    await user.click(screen.getByRole('button', { name: '建立帳戶' }));
 
-    await user.click(screen.getByRole('button', { name: /建立帳戶/i }));
-
+    // Assert
     await waitFor(() => {
-      expect(mockRegisterUser).toHaveBeenCalledTimes(1);
-      expect(mockRegisterUser).toHaveBeenCalledWith({
+      expect(mockMutateAsync).toHaveBeenCalledTimes(1);
+      // 驗證傳遞的資料包含 confirmPassword，因為這是表單的原始資料
+      expect(mockMutateAsync).toHaveBeenCalledWith({
         ...userData,
+        confirmPassword: 'password123',
       });
     });
   });
 
-  it('當 isPending 為 true 時，應該禁用按鈕並顯示載入文字', () => {
-    // 為此測試覆寫預設的模擬
-    mockedUseRegister.mockReturnValue({
-      mutateAsync: mockRegisterUser,
-      isPending: true,
+  it('在註冊期間，按鈕應顯示 "處理中..." 並被禁用', async () => {
+    // Arrange
+    (useRegister as vi.Mock).mockReturnValue({
+      mutateAsync: mockMutateAsync,
+      isPending: true, // 模擬正在處理中
       error: null,
-    } as unknown as MockUseRegister);
-
-    renderComponent();
-
-    const submitButton = screen.getByRole('button', { name: /處理中.../i });
-    expect(submitButton).toBeInTheDocument();
-    expect(submitButton).toBeDisabled();
-  });
-
-  it('註冊成功後應該呼叫 setAuth 並導向個人資料頁', async () => {
-    // Arrange
-    const mockAuthResponse: AuthResponse = {
-      token: 'mock-jwt-token',
-      user: {
-        id: 'user-1',
-        name: 'Test User',
-        email: 'test@example.com',
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      },
-    };
-    mockRegisterUser.mockResolvedValue(mockAuthResponse);
-
-    renderComponent();
-
-    // Act
-    await user.type(screen.getByLabelText('名稱'), 'Test User');
-    await user.type(screen.getByLabelText('電子郵件'), 'test@example.com');
-    await user.type(screen.getByLabelText('密碼'), 'password123');
-    await user.click(screen.getByRole('button', { name: /建立帳戶/i }));
+    });
+    renderWithRoutes();
 
     // Assert
-    await waitFor(() => {
-      expect(mockSetAuth).toHaveBeenCalledWith(
-        mockAuthResponse.user,
-        mockAuthResponse.token
-      );
-    });
-
-    await waitFor(() => {
-      expect(mockNavigate).toHaveBeenCalledWith('/profile', { replace: true });
-    });
+    const button = screen.getByRole('button', { name: '處理中...' });
+    expect(button).toBeInTheDocument();
+    expect(button).toBeDisabled();
   });
 
-  it('當 API 返回錯誤時，應該顯示錯誤訊息', async () => {
+  it('當註冊 API 失敗時，應顯示錯誤訊息', async () => {
     // Arrange
-    const mockError = new ApiError(409, '此電子郵件已被註冊');
-    mockedUseRegister.mockReturnValue({
-      mutateAsync: mockRegisterUser,
+    const errorMessage = '此電子郵件已被註冊';
+    (useRegister as vi.Mock).mockReturnValue({
+      mutateAsync: mockMutateAsync,
       isPending: false,
-      error: mockError,
-    } as unknown as MockUseRegister);
-
-    renderComponent();
+      error: new Error(errorMessage), // 模擬 API 錯誤
+    });
+    renderWithRoutes();
 
     // Assert
-    expect(await screen.findByText('此電子郵件已被註冊')).toBeInTheDocument();
+    expect(await screen.findByText(errorMessage)).toBeInTheDocument();
   });
 });

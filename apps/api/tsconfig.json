@@ -1,13 +1,15 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
+    // 覆寫根目錄的 noEmit: true，以實際產生建置輸出
+    "noEmit": false,
     "outDir": "./dist",
-    "rootDir": "./src",
+    // 針對 Node.js ESM 專案的最佳化設定
     "module": "NodeNext",
     "moduleResolution": "NodeNext"
   },
-  "include": ["src/**/*.ts", "src/test/setup.ts"],
-  "exclude": ["node_modules", "dist"],
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "dist", "src/**/*.test.ts", "src/test"],
   "references": [
     {
       "path": "../../packages/types"

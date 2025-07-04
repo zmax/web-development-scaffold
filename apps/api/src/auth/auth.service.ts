@@ -4,20 +4,20 @@ import type { User } from '@prisma/client';
 import type { RegisterUserDto, LoginUserDto } from '@axiom/types';
 import prisma from '../lib/prisma.js';
 import {
-  BadRequestError,
+  // BadRequestError,
   ConflictError,
   UnauthorizedError,
 } from '../lib/errors.js';
 
 const JWT_SECRET = process.env.JWT_SECRET || 'your-super-secret-key';
-const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || 604800; // 7 days in seconds
+const JWT_EXPIRES_IN = parseInt(process.env.JWT_EXPIRES_IN || '604800', 10); // 7 days in seconds
 
 // 輔助函式：產生 JWT
 const generateToken = (userId: string): string => {
   const payload = { id: userId };
   // 明確傳遞 SignOptions 物件
   const options: jwt.SignOptions = {
-    expiresIn: Number(JWT_EXPIRES_IN),
+    expiresIn: JWT_EXPIRES_IN,
   };
   return jwt.sign(payload, JWT_SECRET, options);
 };
@@ -36,11 +36,6 @@ const omitPassword = (user: User): Omit<User, 'password'> => {
  */
 export const register = async (input: RegisterUserDto) => {
   const { email, password, name } = input;
-
-  // Zod ���經在 controller 層驗證過，這裡的檢查作為最後的防線
-  if (!email || !password || !name) {
-    throw new BadRequestError('缺少必要的欄位：email, password, name');
-  }
 
   const existingUser = await prisma.user.findUnique({ where: { email } });
   if (existingUser) {
@@ -65,10 +60,6 @@ export const register = async (input: RegisterUserDto) => {
  */
 export const login = async (input: LoginUserDto) => {
   const { email, password } = input;
-
-  if (!email || !password) {
-    throw new BadRequestError('缺少 email 或 password');
-  }
 
   const user = await prisma.user.findUnique({ where: { email } });
   if (!user) {

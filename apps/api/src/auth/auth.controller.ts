@@ -2,14 +2,14 @@ import { Router, Request, Response, NextFunction } from 'express';
 // import { PrismaClient } from '@prisma/client';
 import * as authService from './auth.service.js';
 import { validate } from '../middleware/validation.middleware.js';
-import { LoginUserSchema, RegisterUserSchema } from '@axiom/types';
+import { LoginUserSchema, RegisterUserDtoSchema } from '@axiom/types';
 
 const router = Router();
 
 // POST /api/v1/auth/register
 router.post(
   '/register',
-  validate(RegisterUserSchema),
+  validate(RegisterUserDtoSchema),
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { user, token } = await authService.register(req.body);

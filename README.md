@@ -137,12 +137,32 @@ pnpm dev
 
 ## 🤝 貢獻
 
-歡迎所有貢獻！請在發送 Pull Request 前確保您的程式���通過所有品質檢查。
+我們非常歡迎所有形式的貢獻！如果您希望為 Axiom 專案做出貢獻，請遵循以下步驟：
 
-本專案嚴格遵守 [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/) 規範。您可以使用 `pnpm commit` 來確保您的提交訊息符合格式。
+### 開發流程
+
+1.  **Fork 本儲存庫** 到您自己的 GitHub 帳戶。
+2.  從 `develop` 分支建立一個新的功能分支。請遵循以下命名慣例：
+    - 新功能: `feat/a-brief-description` (例如: `feat/user-password-reset`)
+    - 錯誤修復: `fix/a-brief-description` (例如: `fix/login-form-validation`)
+3.  進行您的程式碼變更。
+4.  在提交之前，請確保所有品質檢查都已通過：
+    - 執行測試: `pnpm test`
+    - 檢查程式碼風格: `pnpm lint`
+5.  **提交您的變更**。本專案嚴格遵守 Conventional Commits 規範。我們強烈建議使用 `pnpm commit` 指令，它會引導您產生合規的提交訊息。
+6.  將您的功能分支推送到您 Fork 的儲存庫。
+7.  建立一個 Pull Request，目標分支為原始儲存庫的 `develop` 分支。請在 PR 的描述中詳細說明您的變更內容。
 
 ## 🔮 後續發展建議
 
 - **元件庫文件**: 為 `packages/ui` 增加 Storybook 或類似工具，以建立元件文件和互動式展示。
 - **狀態管理**: 根據應用複雜度，考慮引入 Zustand, Redux Toolkit 或其他狀態管理方案。
 - **CI/CD**: 建立自動化的持續整合與部署流程 (例如使用 GitHub Actions)，在程式碼推送到主分支時自動執行測試、建構和部署。
+
+## 📚 專案文件
+
+本專案的核心文件存放於 `docs/` 目錄下：
+
+- **產品需求文件 (PRD)**: 定義專案的願景、目標和功能需求。
+- **架構決策紀錄 (ADRs)**: 記錄重要的技術選擇及其背後的理由。
+- **開發待辦清單 (TODO)**: 追蹤專案的開發進度和未來規劃。

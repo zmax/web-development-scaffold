@@ -1,28 +1,19 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import type { UserProfile } from '@axiom/types';
+import type { AuthResponse } from '@axiom/types';
 
 interface AuthState {
-  user: UserProfile | null;
-  token: string | null;
-  isAuthenticated: boolean;
-  setAuth: (user: UserProfile, token: string) => void;
+  auth: AuthResponse | null;
+  setAuth: (data: AuthResponse) => void;
   clearAuth: () => void;
-  logout: () => void;
 }
 
 export const useAuthStore = create<AuthState>()(
   persist(
-    (set, get) => ({
-      user: null,
-      token: null,
-      isAuthenticated: false,
-      setAuth: (user, token) => set({ user, token, isAuthenticated: true }),
-      clearAuth: () => set({ user: null, token: null, isAuthenticated: false }),
-      logout: () => {
-        get().clearAuth();
-        // You might want to clear other caches or redirect here
-      },
+    set => ({
+      auth: null,
+      setAuth: (data: AuthResponse) => set({ auth: data }),
+      clearAuth: () => set({ auth: null }),
     }),
     {
       name: 'auth-storage', // local storage 中的 key

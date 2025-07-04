@@ -6,8 +6,13 @@
     "lib": ["ES2020", "DOM", "DOM.Iterable"],
     "module": "ESNext",
     "skipLibCheck": true,
-    "types": ["vite/client"],
-
+    "types": [
+      "vite/client",
+      // 為 Vitest 的全域 API (describe, it, expect, vi) 提供型別定義
+      // 這對於在測試檔案中獲得正確的 IDE 智慧提示至關重要
+      "vitest/globals",
+      "vitest"
+    ],
     /* Bundler mode */
     "moduleResolution": "bundler",
     "allowImportingTsExtensions": true,
@@ -15,15 +20,19 @@
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "react-jsx",
-
     /* Linting */
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true
   },
-  "include": ["src"],
-  "exclude": ["src/**/*.test.ts", "src/**/*.test.tsx", "vitest.config.ts"],
+  // "include" 應該包含所有相關的 TypeScript 檔案，包括測試檔案，
+  // 這樣 TypeScript Language Server (用於 VSCode 等 IDE) 和 Vitest 才能正確地解析它們。
+  "include": ["src", "vite.config.ts"],
+  // `exclude` 應只排除不應被 TypeScript 處理的目錄，例如建置輸出和依賴項。
+  // 測試檔案應被包含在主設定檔中，以利於 IDE 和 Vitest 的整合。
+  // 生產環境的建置將使用 tsconfig.build.json 來排除它們。
+  "exclude": ["dist", "node_modules"],
   "references": [
     {
       "path": "../../packages/ui"
