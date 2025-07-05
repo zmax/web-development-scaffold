@@ -1,5 +1,5 @@
 import { useAuthStore } from '@/stores/authStore';
-import { Button } from '@ui/index';
+import { Button } from '@axiom/ui';
 import { Link } from 'react-router-dom';
 
 export const HomePage = () => {

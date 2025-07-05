@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach, type Mock } from 'vitest';
 import { mockReset } from 'vitest-mock-extended';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
@@ -53,8 +53,8 @@ describe('Auth Service', () => {
       // Arrange
       prismaMock.user.findUnique.mockResolvedValue(null); // 沒有已存在的使用者
       prismaMock.user.create.mockResolvedValue(mockUser);
-      vi.mocked(bcrypt.hash).mockResolvedValue('hashedpassword');
-      vi.mocked(jwt.sign).mockReturnValue('mocked-jwt-token');
+      (bcrypt.hash as Mock).mockResolvedValue('hashedpassword');
+      (jwt.sign as Mock).mockReturnValue('mocked-jwt-token');
 
       // Act
       const result = await authService.register(mockUserInput);
@@ -113,8 +113,8 @@ describe('Auth Service', () => {
     it('應該成功登入並返回使用者資訊和 token', async () => {
       // Arrange
       prismaMock.user.findUnique.mockResolvedValue(mockUser);
-      vi.mocked(bcrypt.compare).mockResolvedValue(true); // 密碼正確
-      vi.mocked(jwt.sign).mockReturnValue('mocked-jwt-token');
+      (bcrypt.compare as Mock).mockResolvedValue(true); // 密碼正確
+      (jwt.sign as Mock).mockReturnValue('mocked-jwt-token');
 
       // Act
       const result = await authService.login(mockLoginInput);
@@ -152,7 +152,7 @@ describe('Auth Service', () => {
     it('如果密碼不正確，應該拋出 UnauthorizedError', async () => {
       // Arrange
       prismaMock.user.findUnique.mockResolvedValue(mockUser);
-      vi.mocked(bcrypt.compare).mockResolvedValue(false); // 密碼不正確
+      (bcrypt.compare as Mock).mockResolvedValue(false); // 密碼不正確
 
       // Act & Assert
       await expect(authService.login(mockLoginInput)).rejects.toThrow(

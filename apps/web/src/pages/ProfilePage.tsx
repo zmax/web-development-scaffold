@@ -1,5 +1,5 @@
 import { useAuthStore } from '@/stores/authStore';
-import { Button } from '@ui/index';
+import { Button } from '@axiom/ui';
 import { useNavigate } from 'react-router-dom';
 // import { useEffect } from 'react';
 import { useLogout } from '@/hooks/useAuth';

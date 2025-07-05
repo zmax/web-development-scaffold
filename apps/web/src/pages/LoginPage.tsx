@@ -13,7 +13,7 @@ import {
   CardTitle,
   CardContent,
   CardFooter,
-} from '@ui/index';
+} from '@axiom/ui';
 import { LoginUserSchema, type LoginUserDto } from '@axiom/types';
 
 export const LoginPage: FC = () => {

@@ -1,16 +1,15 @@
+/// <reference types="vitest" />
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
-import { resolve } from 'path';
+import tsconfigPaths from 'vite-tsconfig-paths';
 
 export default defineConfig({
-  plugins: [react()],
-  resolve: {
-    alias: {
-      '@': resolve(__dirname, './src'),
-      '@ui': resolve(__dirname, '../../packages/ui/src'),
-      '@utils': resolve(__dirname, '../../packages/utils/src'),
-      '@types': resolve(__dirname, '../../packages/types/src'),
-    },
+  // 使用 tsconfigPaths 外掛程式來自動讀取 tsconfig.json 中的路徑別名
+  // 這比手動設定 alias 更可靠且易於維護
+  plugins: [react(), tsconfigPaths()],
+  build: {
+    // 明確指定輸出目錄，雖然 'dist' 是預設值，但這樣可以讓設定更清晰
+    outDir: 'dist',
   },
   test: {
     globals: true,

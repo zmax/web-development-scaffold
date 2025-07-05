@@ -18,9 +18,6 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["./apps/web/src/*"],
-      "@ui/*": ["./packages/ui/src/*"],
-      "@utils/*": ["./packages/utils/src/*"],
-      "@types/*": ["./packages/types/src/*"],
       "@api/*": ["./apps/api/src/*"]
     }
   },

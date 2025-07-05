@@ -2,7 +2,7 @@ import { Router, Request, Response, NextFunction } from 'express';
 import * as userService from './user.service.js';
 import { authMiddleware } from '../middleware/auth.middleware.js';
 
-const router = Router();
+const router: Router = Router();
 
 // GET /api/v1/users/me - 獲取當前登入使用者的資訊
 router.get(

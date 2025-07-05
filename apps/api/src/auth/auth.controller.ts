@@ -4,7 +4,7 @@ import * as authService from './auth.service.js';
 import { validate } from '../middleware/validation.middleware.js';
 import { LoginUserSchema, RegisterUserDtoSchema } from '@axiom/types';
 
-const router = Router();
+const router: Router = Router();
 
 // POST /api/v1/auth/register
 router.post(

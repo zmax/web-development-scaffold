@@ -4,6 +4,7 @@
   "private": true,
   "type": "module",
   "main": "./dist/index.js",
+  "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
@@ -11,22 +12,21 @@
       "types": "./dist/index.d.ts"
     }
   },
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "build": "tsc",
-    "test": "vitest run --coverage",
-    "test:watch": "vitest",
-    "lint": "eslint . --ext .ts",
-    "clean": "rm -rf dist"
+    "clean": "rimraf dist",
+    "lint": "eslint . --ext .ts"
   },
   "dependencies": {
-    "clsx": "^2.0.0",
-    "date-fns": "^2.30.0",
-    "tailwind-merge": "^2.0.0"
+    "clsx": "^2.1.1",
+    "tailwind-merge": "^2.4.0"
   },
   "devDependencies": {
-    "@types/react": "^18.3.23",
-    "@vitest/coverage-v8": "^2.0.4",
-    "typescript": "^5.3.2",
-    "vitest": "^2.1.9"
+    "eslint": "^9.30.0",
+    "rimraf": "^5.0.10",
+    "typescript": "^5.8.3"
   }
 }
