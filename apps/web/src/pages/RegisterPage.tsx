@@ -54,16 +54,17 @@ export function RegisterPage() {
   return (
     <div className='flex items-center justify-center min-h-screen bg-gray-100 dark:bg-gray-950'>
       <Card className='w-full max-w-sm'>
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <CardHeader>
-            <CardTitle className='text-2xl'>註冊</CardTitle>
-            <CardDescription>
-              已經有帳戶了？{' '}
-              <Link to='/login' className='underline'>
-                登入
-              </Link>
-            </CardDescription>
-          </CardHeader>
+        <CardHeader>
+          <CardTitle className='text-2xl'>註冊</CardTitle>
+          <CardDescription>
+            已經有帳戶了？{' '}
+            <Link to='/login' className='underline'>
+              登入
+            </Link>
+          </CardDescription>
+        </CardHeader>
+        {/* 將 form 移至此處，使其只包裝需要提交的內容，結構更清晰且語意正確。 */}
+        <form onSubmit={handleSubmit(onSubmit)} noValidate>
           <CardContent className='grid gap-4'>
             <div className='grid gap-2'>
               <Label htmlFor='name'>名稱</Label>

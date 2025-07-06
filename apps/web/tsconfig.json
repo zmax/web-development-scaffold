@@ -6,9 +6,12 @@
     "jsx": "react-jsx",
     "module": "ESNext",
     "moduleResolution": "bundler",
+    // 標記為複合專案，以便被 `tsc --build` 正確處理
+    "composite": true,
     // --- 輸出設定 ---
     // 對於使用 Vite 的應用程式，tsc 只用於型別檢查，不產生輸出檔案。
     "noEmit": true,
+    "outDir": "dist",
     // --- 內部路徑別名 ---
     "baseUrl": ".",
     "paths": {
@@ -16,6 +19,13 @@
     }
   },
   "include": ["src"],
+  "exclude": [
+    "node_modules",
+    "dist",
+    // 整合 build.json 的排除規則，確保測試檔案和設定檔被完全排除
+    "src/**/*.test.{ts,tsx}",
+    "src/test"
+  ],
   "references": [
     // 定義對共享套件的建構依賴
     {

@@ -19,7 +19,7 @@
     "dev": "tsc -w",
     "build": "tsc -b",
     "test": "vitest run --passWithNoTests",
-    "clean": "rimraf dist",
+    "clean": "rimraf dist tsconfig.tsbuildinfo",
     "lint": "eslint . --ext .ts"
   },
   "dependencies": {

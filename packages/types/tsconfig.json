@@ -6,8 +6,11 @@
     "rootDir": "./src",
     "declaration": true,
     "declarationMap": true,
-    "composite": true
+    "sourceMap": true,
+    "composite": true // 標記為複合專案
   },
-  "include": ["src/**/*"],
-  "exclude": ["dist", "node_modules", "src/**/*.test.ts"]
+  "include": ["src"],
+  // **重要**: 明確排除 node_modules 和 dist 目錄。
+  // 缺少此設定是導致 `tsc` 嘗試編譯過多檔案而「卡住」的常見原因。
+  "exclude": ["node_modules", "dist", "src/**/*.test.{ts,tsx}"]
 }

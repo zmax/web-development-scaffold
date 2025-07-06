@@ -1,6 +1,6 @@
-import { screen, waitFor } from '@testing-library/react';
+import { screen, waitFor, cleanup } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { Route, Routes } from 'react-router-dom';
 
 import { RegisterPage } from './RegisterPage';
@@ -55,6 +55,12 @@ describe('RegisterPage', () => {
       isPending: false,
       error: null,
     });
+  });
+
+  // 確保在每次測試後清理 DOM，解決因重複渲染導致的「找到多個元素」錯誤。
+  // 這是確保測試之間完全隔離的最佳實踐。
+  afterEach(() => {
+    cleanup();
   });
 
   it('應正確渲染所有 UI 元件', () => {
@@ -131,6 +137,7 @@ describe('RegisterPage', () => {
     await user.type(screen.getByLabelText('電子郵件'), userData.email);
     await user.type(screen.getByLabelText('密碼'), userData.password);
     await user.type(screen.getByLabelText('確認密碼'), userData.password);
+    // await user.click(screen.getByLabel)
     await user.click(screen.getByRole('button', { name: '建立帳戶' }));
 
     // Assert
