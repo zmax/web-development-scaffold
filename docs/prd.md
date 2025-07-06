@@ -40,6 +40,61 @@ Axiom 旨在成為開發者啟動新專案時的首選骨架，讓他們可以�
 - **作為一名現有使用者**，我希望能透過我的電子郵件和密碼安全地登入我的帳戶，以便存取我的個人資料和相關功能。
 - **作為一名已登入的使用者**，我希望能清楚地看到我的登入狀態（例如，在頁面上看到我的名字），並且可以輕鬆地登出帳戶。
 
+### 4.3. 核心使用者流程圖 (Core User Flowchart)
+
+```mermaid
+graph TD
+    subgraph "使用者註冊 (Registration)"
+        direction TB
+        A1(使用者訪問 /register) --> A2{填寫註冊表單};
+        A2 --> A3{提交表單};
+        A3 -- 前端驗證 (Zod) --> A4[發送 POST /api/v1/auth/register];
+        A4 -- 後端驗證 --> A5{Email 是否已存在?};
+        A5 -- 是 --> A6[回傳錯誤訊息];
+        A5 -- 否 --> A7[雜湊密碼 & 建立使用者資料];
+        A7 --> A8[生成 JWT];
+        A8 --> A9[回傳 AuthResponse (user + token)];
+        A9 --> A10[前端 Zustand.setAuth 更新狀態];
+        A10 --> A11[狀態持久化至 localStorage];
+        A11 --> A12(導向至 /profile);
+        A6 --> A13[前端顯示錯誤];
+    end
+
+    subgraph "使用者登入 (Login)"
+        direction TB
+        B1(使用者訪問 /login) --> B2{填寫登入表單};
+        B2 --> B3{提交表單};
+        B3 -- 前端驗證 --> B4[發送 POST /api/v1/auth/login];
+        B4 -- 後端驗證 --> B5{使用者存在且密碼正確?};
+        B5 -- 否 --> B6[回傳通用錯誤訊息];
+        B5 -- 是 --> B7[生成新的 JWT];
+        B7 --> B8[回傳 AuthResponse (user + token)];
+        B8 --> B9[前端 Zustand.setAuth 更新狀態];
+        B9 --> B10[狀態持久化至 localStorage];
+        B10 --> B11(導向至 /profile);
+        B6 --> B12[前端顯示錯誤];
+    end
+
+    subgraph "使用者登出 (Logout)"
+        direction TB
+        C1(已登入使用者) --> C2{點擊「登出」按鈕};
+        C2 --> C3[呼叫 useLogout hook];
+        C3 --> C4[Zustand.clearAuth 清除狀態];
+        C4 --> C5[從 localStorage 移除狀態];
+        C5 --> C6[React Query.queryClient.clear 清除快取];
+        C6 --> C7(導向至 /login);
+    end
+
+    %% 樣式定義
+    classDef startend fill:#d3baba,stroke:#333,stroke-width:2px,color:#333;
+    classDef action fill:#a9c4b3,stroke:#333,stroke-width:2px,color:#333;
+    classDef decision fill:#f9f3d9,stroke:#333,stroke-width:2px,color:#333;
+
+    class A1,A12,B1,B11,C1,C7 startend;
+    class A2,A3,A4,A5,B2,B3,B4,B5,C2 decision;
+    class A6,A7,A8,A9,A10,A11,A13,B6,B7,B8,B9,B10,B12,C3,C4,C5,C6 action;
+```
+
 ## 5. 功能需求 (Functional Requirements)
 
 ##### 5.1. 核心架構：Monorepo

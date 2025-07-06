@@ -3,7 +3,6 @@ import userEvent from '@testing-library/user-event';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { Route, Routes } from 'react-router-dom';
 
-import type { AuthResponse } from '@axiom/types';
 import { LoginPage } from './LoginPage';
 import { useLogin } from '@/hooks/useAuth';
 import { useAuthStore } from '@/stores/authStore';
@@ -56,7 +55,7 @@ describe('LoginPage', () => {
   const mockMutateAsync = vi.fn();
 
   // 輔助函式，用於渲染元件並設定路由
-  const renderWithRoutes = (initialAuth: AuthResponse | null = null) => {
+  const renderWithRoutes = (initialAuth = null) => {
     (useAuthStore as vi.Mock).mockReturnValue({ auth: initialAuth });
     render(
       <Routes>

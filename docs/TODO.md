@@ -18,7 +18,7 @@
 - [x] 引入 `react-router-dom` 並設定基礎路由 (首頁, 登入, 註冊, 個人資料頁)。
 - [x] 建立登入與註冊頁面的表單元件。
 - [x] 引入 `Zustand` 來進行全域使用者狀態管理 (e.g., `authStore`)。
-- [x] 整合 `SWR` 來處理對後端 API 的請求。
+- [x] 整合資料獲取庫來處理對後端 API 的請求 (註：最終選擇並整合了 `@tanstack/react-query`)。
 - [x] 在 `packages/ui` 中建立更多通用元件 (`Input`, `Label`, `Card`)。
 
 ## Phase 3: 測試與品質保證 (Testing & QA)

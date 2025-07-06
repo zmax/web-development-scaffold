@@ -23,8 +23,8 @@
     }
   },
   "include": [
-    "src",
-    "vite.config.ts" // 將 vite 設定檔納入型別檢查
+    "src"
+    // "vite.config.ts" // 將 vite 設定檔納入型別檢查
   ],
   // 在開發設定中，我們只排除 node_modules 和 dist，
   // 以便 IDE 和 Vitest 能夠正確處理所有原始碼和測試檔案。
