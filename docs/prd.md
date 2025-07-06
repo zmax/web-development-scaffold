@@ -53,7 +53,7 @@ graph TD
         A5 -- 是 --> A6[回傳錯誤訊息];
         A5 -- 否 --> A7[雜湊密碼 & 建立使用者資料];
         A7 --> A8[生成 JWT];
-        A8 --> A9[回傳 AuthResponse (user + token)];
+        A8 --> A9["回傳 AuthResponse (user + token)"];
         A9 --> A10[前端 Zustand.setAuth 更新狀態];
         A10 --> A11[狀態持久化至 localStorage];
         A11 --> A12(導向至 /profile);
@@ -68,7 +68,7 @@ graph TD
         B4 -- 後端驗證 --> B5{使用者存在且密碼正確?};
         B5 -- 否 --> B6[回傳通用錯誤訊息];
         B5 -- 是 --> B7[生成新的 JWT];
-        B7 --> B8[回傳 AuthResponse (user + token)];
+        B7 --> B8["回傳 AuthResponse (user + token)"];
         B8 --> B9[前端 Zustand.setAuth 更新狀態];
         B9 --> B10[狀態持久化至 localStorage];
         B10 --> B11(導向至 /profile);
