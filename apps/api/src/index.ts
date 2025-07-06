@@ -29,7 +29,7 @@ app.use('/api/v1/users', userRouter);
 // 掛載集中的錯誤處理中介軟體
 app.use(errorHandler);
 
-app.get('/', (req, res) => {
+app.get('/', (_req, res) => {
   res.send('API is running!');
 });
 

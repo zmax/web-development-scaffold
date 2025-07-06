@@ -1,16 +1,21 @@
 {
-  "extends": "../../tsconfig.json",
+  "extends": "../../tsconfig.base.json",
   "compilerOptions": {
-    // 覆寫根設定，允許產生 JS 檔案
-    "noEmit": false,
+    // --- 輸出設定 ---
     "outDir": "./dist",
     "rootDir": "./src",
-    // 標記為複合專案，以便被根目錄的 `tsc --build` 正確處理
+    // 標記為複合專案，以便被 `tsc --build` 正確處理
     "composite": true,
-    // 對於 Node.js 後端，使用 NodeNext 更為現代和精確
+    // --- 模組設定 (Node.js) ---
+    // 對於現代 Node.js 後端，使用 NodeNext 更為精確
     "module": "NodeNext",
     "moduleResolution": "NodeNext"
   },
   "include": ["src/**/*"],
-  "exclude": ["dist", "node_modules"]
+  "exclude": ["dist", "node_modules"],
+  "references": [
+    {
+      "path": "../../packages/types"
+    }
+  ]
 }

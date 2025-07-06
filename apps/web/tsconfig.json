@@ -1,37 +1,31 @@
 {
-  "extends": "../../tsconfig.json",
+  "extends": "../../tsconfig.base.json",
   "compilerOptions": {
-    "target": "ES2020",
-    "useDefineForClassFields": true,
-    "lib": ["ES2020", "DOM", "DOM.Iterable"],
-    "module": "ESNext",
-    "skipLibCheck": true,
-    /* Bundler mode */
-    "moduleResolution": "bundler",
-    "allowImportingTsExtensions": true,
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-    "noEmit": true, // Vite 負責轉譯，tsc 只做型別檢查
+    // --- 環境與模組設定 (Vite + React) ---
+    "lib": ["DOM", "DOM.Iterable", "ESNext"],
     "jsx": "react-jsx",
-    /* Linting */
-    "strict": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "noFallthroughCasesInSwitch": true,
-    /* Monorepo 設定 */
-    "composite": true // 將此專案標記為複合專案的一部分
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    // --- 輸出設定 ---
+    // 對於使用 Vite 的應用程式，tsc 只用於型別檢查，不產生輸出檔案。
+    "noEmit": true,
+    // --- 內部路徑別名 ---
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"]
+    }
   },
   "include": ["src"],
-  // 專案引用是 Monorepo 建置和 IDE 效能的關鍵
   "references": [
-    {
-      "path": "../../packages/types"
-    },
+    // 定義對共享套件的建構依賴
     {
       "path": "../../packages/ui"
     },
     {
       "path": "../../packages/utils"
+    },
+    {
+      "path": "../../packages/types"
     }
   ]
 }

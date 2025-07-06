@@ -1,26 +1,10 @@
 {
-  "compilerOptions": {
-    "target": "ES2022",
-    "lib": ["ES2022", "DOM", "DOM.Iterable"],
-    "allowJs": true,
-    "skipLibCheck": true,
-    "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
-    "strict": true,
-    "forceConsistentCasingInFileNames": true,
-    "noFallthroughCasesInSwitch": true,
-    "module": "ESNext",
-    "moduleResolution": "bundler",
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-    "noEmit": true,
-    "jsx": "react-jsx",
-    "baseUrl": ".",
-    "paths": {
-      "@/*": ["./apps/web/src/*"],
-      "@api/*": ["./apps/api/src/*"]
-    }
-  },
+  // 這個根 tsconfig.json 檔案專門用於「專案引用 (Project References)」。
+  // 它會告訴 `tsc --build` 指令要建構哪些專案以及它們之間的依賴順序。
+  // 它不應該包含任何共享的 `compilerOptions`，這些選項應定義在 `tsconfig.base.json` 中。
+  //
+  // 執行 `pnpm type-check` 或 `tsc --build --verbose` 將會使用此檔案來進行全專案的型別檢查。
+  "files": [],
   "references": [
     {
       "path": "./apps/web"
@@ -37,6 +21,5 @@
     {
       "path": "./packages/types"
     }
-  ],
-  "files": []
+  ]
 }
