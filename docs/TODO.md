@@ -26,6 +26,7 @@
 - [x] 為 `packages/utils` 中的所有函式編寫單元測試。
 - [x] 為 `packages/ui` 中的核心元件編寫單元測試。
 - [x] 為後端 API 的核心業務邏輯 (e.g., 驗證服務) 編寫單元測試。
+- [x] 為前端應用 (`apps/web`) 的核心頁面與 Hooks (登入/註冊/個人資料/路由保護) 編寫整合測試。
 - [ ] 為後端 API 端點編寫整合測試 (e.g., using Supertest)，驗證完整的請求-回應流程。
 - [ ] (長期) 引入 Playwright 或 Cypress 並為使用者登入/註冊流程編寫 E2E 測試。
 
@@ -33,3 +34,10 @@
 
 - [ ] 建立 GitHub Actions 工作流程。
 - [ ] 設定 CI 流程，自動執行 Linting, Testing 和 Building。
+
+## Phase 5: 未來功能與強化 (Future Features & Enhancements)
+
+- [ ] **文件與開發體驗**:
+  - [ ] 為 `packages/ui` 導入 Storybook，建立互動式元件文件。
+- [ ] **後端**:
+  - [ ] 實作基於角色的存取控制 (RBAC)。
