@@ -1,12 +1,12 @@
 {
   "name": "axiom",
   "version": "1.0.0",
+  "type": "module",
   "description": "A modern web development scaffold, built on proven principles (axioms) for quality and efficiency.",
   "private": true,
-  "type": "module",
   "scripts": {
     "build": "pnpm -r build",
-    "dev": "pnpm build && pnpm --filter api --filter web --parallel dev",
+    "dev": "pnpm -r --parallel dev",
     "test": "pnpm -r test",
     "test:watch": "pnpm -r test:watch",
     "lint": "eslint . --ext .ts,.tsx,.js,.jsx",
@@ -30,8 +30,12 @@
     "husky": "^8.0.3",
     "lint-staged": "^15.5.2",
     "prettier": "^3.6.2",
+    "rimraf": "^5.0.10",
     "typescript": "^5.8.3",
-    "typescript-eslint": "^8.35.1"
+    "typescript-eslint": "^8.35.1",
+    "vite-tsconfig-paths": "^4.3.2",
+    "vitest": "^2.1.9",
+    "@vitest/coverage-v8": "^2.0.4"
   },
   "lint-staged": {
     "*.{ts,tsx,js,jsx}": [

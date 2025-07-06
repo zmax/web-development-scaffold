@@ -1,4 +1,12 @@
-import type { User } from '@prisma/client';
-
-// 用於公開顯示的使用者資訊，不包含密碼
-export type UserProfile = Omit<User, 'password'>;
+/**
+ * 代表公開的使用者資料，這是一個獨立的資料傳輸物件 (DTO)。
+ * 它定義了應用程式各層之間（例如後端 API 和前端）的使用者資料契約。
+ * 為了保持關注點分離，此型別不直接依賴於 Prisma 生成的型別。
+ */
+export interface UserProfile {
+  id: string;
+  name: string | null;
+  email: string;
+  createdAt: Date;
+  updatedAt: Date;
+}

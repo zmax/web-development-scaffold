@@ -16,7 +16,8 @@
     "dist"
   ],
   "scripts": {
-    "build": "tsc",
+    "dev": "tsc -w",
+    "build": "tsc -b",
     "clean": "rimraf dist",
     "lint": "eslint . --ext .ts"
   },

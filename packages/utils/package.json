@@ -16,13 +16,15 @@
     "dist"
   ],
   "scripts": {
-    "build": "tsc",
+    "dev": "tsc -w",
+    "build": "tsc -b",
     "clean": "rimraf dist",
     "lint": "eslint . --ext .ts"
   },
   "dependencies": {
     "clsx": "^2.1.1",
-    "tailwind-merge": "^2.4.0"
+    "tailwind-merge": "^2.4.0",
+    "date-fns": "^2.4.0"
   },
   "devDependencies": {
     "eslint": "^9.30.0",
