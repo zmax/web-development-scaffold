@@ -8,25 +8,6 @@ import { RegisterPage } from './pages/RegisterPage';
 import { ProfilePage } from './pages/ProfilePage';
 import { ProtectedRoute } from './components/ProtectedRoute';
 
-// const router = createBrowserRouter([
-//   {
-//     path: '/',
-//     element: <HomePage />,
-//   },
-//   {
-//     path: '/login',
-//     element: <LoginPage />,
-//   },
-//   {
-//     path: '/register',
-//     element: <RegisterPage />,
-//   },
-//   {
-//     path: '/profile',
-//     element: <ProfilePage />,
-//   },
-// ]);
-
 export default function App() {
   return (
     <Routes>

@@ -3,6 +3,7 @@ import userEvent from '@testing-library/user-event';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { Route, Routes } from 'react-router-dom';
 
+import type { AuthResponse } from '@axiom/types';
 import { RegisterPage } from './RegisterPage';
 import { useRegister } from '@/hooks/useAuth';
 import { useAuthStore } from '@/stores/authStore';
@@ -34,7 +35,7 @@ describe('RegisterPage', () => {
   // 將 render 邏輯移至此處，使其更具可讀性
   // 修正：使用 `null` 作為未認證狀態的預設值，而不是 `{}` (空物件是 truthy)
   // 這能確保 `if (auth)` 的檢查行為與真實情況一致。
-  const renderWithRoutes = (initialAuth = null) => {
+  const renderWithRoutes = (initialAuth: AuthResponse | null = null) => {
     (useAuthStore as vi.Mock).mockReturnValue({ auth: initialAuth });
     // 使用共享的 render 函式，並傳入路由設定
     render(

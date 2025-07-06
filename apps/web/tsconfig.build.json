@@ -1,0 +1,42 @@
+{
+  // 直接繼承基礎設定，與開發用的 tsconfig.json 脫鉤
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    // --- 環境與模組設定 (與 tsconfig.json 保持一致) ---
+    "lib": ["DOM", "DOM.Iterable", "ESNext"],
+    "jsx": "react-jsx",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "composite": true,
+    // --- 輸出設定 ---
+    "noEmit": true, // 建構時只做型別檢查，實際輸出由 Vite 負責
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"]
+    }
+  },
+  // 使用 'include' 來指定建構時應包含的目錄。
+  "include": [
+    "src" // 包含所有 src 目錄下的檔案
+  ],
+  // 使用 'exclude' 來排除不需要納入生產建構的檔案和目錄。
+  "exclude": [
+    "node_modules",
+    "dist",
+    "src/**/*.test.ts",
+    "src/**/*.test.tsx",
+    "src/test" // 排除測試工具函式目錄
+  ],
+  // 專案引用保持不變
+  "references": [
+    {
+      "path": "../../packages/ui"
+    },
+    {
+      "path": "../../packages/utils"
+    },
+    {
+      "path": "../../packages/types"
+    }
+  ]
+}

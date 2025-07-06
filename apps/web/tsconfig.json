@@ -7,25 +7,28 @@
     "module": "ESNext",
     "moduleResolution": "bundler",
     // 標記為複合專案，以便被 `tsc --build` 正確處理
+    // 增加測試相關的型別，讓 IDE 和 Vitest 能正確識別 `describe`, `it`, `expect`, `vi` 等。
+    "types": ["vite/client", "vitest/globals", "@testing-library/jest-dom"],
     "composite": true,
     // --- 輸出設定 ---
     // 對於使用 Vite 的應用程式，tsc 只用於型別檢查，不產生輸出檔案。
     "noEmit": true,
     "outDir": "dist",
-    // --- 內部路徑別名 ---
+    "rootDir": "./src",
     "baseUrl": ".",
+    // --- 內部路徑別名 ---
+    // "baseUrl": ".",
     "paths": {
       "@/*": ["src/*"]
     }
   },
-  "include": ["src"],
-  "exclude": [
-    "node_modules",
-    "dist",
-    // 整合 build.json 的排除規則，確保測試檔案和設定檔被完全排除
-    "src/**/*.test.{ts,tsx}",
-    "src/test"
+  "include": [
+    "src",
+    "vite.config.ts" // 將 vite 設定檔納入型別檢查
   ],
+  // 在開發設定中，我們只排除 node_modules 和 dist，
+  // 以便 IDE 和 Vitest 能夠正確處理所有原始碼和測試檔案。
+  "exclude": ["node_modules", "dist"],
   "references": [
     // 定義對共享套件的建構依賴
     {
