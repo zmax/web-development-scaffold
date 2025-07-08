@@ -1,31 +1,13 @@
 import { useEffect, type FC } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
 import { useLogin } from '@/hooks/useAuth';
 import { useAuthStore } from '@/stores/authStore';
-import {
-  Button,
-  Input,
-  Label,
-  Card,
-  CardHeader,
-  CardTitle,
-  CardContent,
-  CardFooter,
-} from '@axiom/ui';
-import { LoginUserSchema, type LoginUserDto } from '@axiom/types';
+import { LoginForm } from '@axiom/ui/blocks/LoginForm'; // 導入 LoginForm
+import { type LoginUserDto } from '@axiom/types'; // 保持 LoginUserDto 導入
 
 export const LoginPage: FC = () => {
   const navigate = useNavigate();
   const { auth } = useAuthStore();
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<LoginUserDto>({
-    resolver: zodResolver(LoginUserSchema),
-  });
 
   const {
     mutateAsync: login,
@@ -51,56 +33,20 @@ export const LoginPage: FC = () => {
 
   return (
     <div className='flex items-center justify-center min-h-screen bg-gray-100 dark:bg-gray-950'>
-      <Card className='w-full max-w-sm'>
-        <CardHeader>
-          <CardTitle className='text-2xl font-bold text-center'>
-            <h1 className='sr-only'>登入</h1>
-            登入
-          </CardTitle>
-        </CardHeader>
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <CardContent className='grid gap-4'>
-            <div className='grid gap-2'>
-              <Label htmlFor='email'>電子郵件</Label>
-              <Input
-                id='email'
-                type='email'
-                placeholder='m@example.com'
-                {...register('email')}
-              />
-              {errors.email && (
-                <p className='text-xs text-red-500'>{errors.email.message}</p>
-              )}
-            </div>
-            <div className='grid gap-2'>
-              <Label htmlFor='password'>密碼</Label>
-              <Input id='password' type='password' {...register('password')} />
-              {errors.password && (
-                <p className='text-xs text-red-500'>
-                  {errors.password.message}
-                </p>
-              )}
-            </div>
-            {loginError && (
-              <p className='text-sm text-red-500'>{loginError.message}</p>
-            )}
-          </CardContent>
-          <CardFooter className='flex flex-col items-center gap-4'>
-            <Button type='submit' className='w-full' disabled={isLoggingIn}>
-              {isLoggingIn ? '登入中...' : '登入'}
-            </Button>
-            <p className='text-sm text-center text-gray-600'>
-              還沒有帳號？{' '}
-              <Link
-                to='/register'
-                className='font-medium text-blue-600 hover:underline'
-              >
-                註冊
-              </Link>
-            </p>
-          </CardFooter>
-        </form>
-      </Card>
+      <LoginForm
+        onSubmit={onSubmit}
+        isLoading={isLoggingIn}
+        error={loginError?.message}
+      />
+      <div className='absolute bottom-8 text-sm text-center text-gray-600'>
+        還沒有帳號？{' '}
+        <Link
+          to='/register'
+          className='font-medium text-blue-600 hover:underline'
+        >
+          註冊
+        </Link>
+      </div>
     </div>
   );
 };

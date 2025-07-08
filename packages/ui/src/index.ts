@@ -8,3 +8,5 @@ export * from './components/base/button';
 export * from './components/base/card';
 export * from './components/base/input';
 export * from './components/base/label';
+export * from './components/blocks/LoginForm';
+export * from './components/blocks/RegisterForm';

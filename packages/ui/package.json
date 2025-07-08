@@ -10,6 +10,14 @@
     ".": {
       "import": "./dist/index.js",
       "types": "./dist/index.d.ts"
+    },
+    "./blocks/LoginForm": {
+      "import": "./dist/components/blocks/LoginForm.js",
+      "types": "./dist/components/blocks/LoginForm.d.ts"
+    },
+    "./blocks/RegisterForm": {
+      "import": "./dist/components/blocks/RegisterForm.js",
+      "types": "./dist/components/blocks/RegisterForm.d.ts"
     }
   },
   "files": [
@@ -24,7 +32,10 @@
   },
   "dependencies": {
     "@axiom/utils": "workspace:*",
-    "react": "^18.2.0"
+    "@axiom/types": "workspace:*",
+    "react": "^18.2.0",
+    "react-hook-form": "^7.52.1",
+    "@hookform/resolvers": "^3.9.0"
   },
   "devDependencies": {
     "@radix-ui/react-label": "^2.1.7",

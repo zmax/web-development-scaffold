@@ -10,7 +10,11 @@
     "composite": true, // 標記為複合專案
     // --- 模組與環境設定 (React) ---
     "lib": ["DOM", "DOM.Iterable", "ES2022"],
-    "jsx": "react-jsx"
+    "jsx": "react-jsx",
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"]
+    }
   },
   "include": ["src"],
   "exclude": [
@@ -24,6 +28,9 @@
     // 定義對共享套件的建構依賴
     {
       "path": "../utils"
+    },
+    {
+      "path": "../types"
     }
   ]
 }

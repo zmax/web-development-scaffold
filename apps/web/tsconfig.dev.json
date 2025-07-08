@@ -12,15 +12,21 @@
     "paths": {
       "@/*": ["src/*"],
       "@axiom/types/*": ["../../packages/types/src/*"],
-      "@axiom/ui/*": ["../../packages/ui/src/*"],
+      "@axiom/ui/*": ["../../packages/ui/src/components/*"],
       "@axiom/utils/*": ["../../packages/utils/src/*"]
     }
   },
   "include": ["src", "vite.config.ts"],
   "exclude": ["node_modules", "dist"],
   "references": [
-    { "path": "../../packages/ui" },
-    { "path": "../../packages/utils" },
-    { "path": "../../packages/types" }
+    {
+      "path": "../../packages/ui"
+    },
+    {
+      "path": "../../packages/utils"
+    },
+    {
+      "path": "../../packages/types"
+    }
   ]
 }

@@ -1,6 +1,7 @@
+/// <reference types="vitest/globals" />
 import { screen, waitFor, cleanup } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { Route, Routes } from 'react-router-dom';
 
 import type { AuthResponse } from '@axiom/types';
@@ -74,9 +75,7 @@ describe('RegisterPage', () => {
     expect(screen.getByLabelText('電子郵件')).toBeInTheDocument();
     expect(screen.getByLabelText('密碼')).toBeInTheDocument();
     expect(screen.getByLabelText('確認密碼')).toBeInTheDocument();
-    expect(
-      screen.getByRole('button', { name: '建立帳戶' })
-    ).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: '註冊' })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: '登入' })).toHaveAttribute(
       'href',
       '/login'
@@ -112,7 +111,7 @@ describe('RegisterPage', () => {
     await user.type(screen.getByLabelText('電子郵件'), 'test@example.com');
     await user.type(screen.getByLabelText('密碼'), 'password123');
     await user.type(screen.getByLabelText('確認密碼'), 'password456');
-    await user.click(screen.getByRole('button', { name: '建立帳戶' }));
+    await user.click(screen.getByRole('button', { name: '註冊' }));
 
     // Assert
     expect(
@@ -139,7 +138,7 @@ describe('RegisterPage', () => {
     await user.type(screen.getByLabelText('密碼'), userData.password);
     await user.type(screen.getByLabelText('確認密碼'), userData.password);
     // await user.click(screen.getByLabel)
-    await user.click(screen.getByRole('button', { name: '建立帳戶' }));
+    await user.click(screen.getByRole('button', { name: '註冊' }));
 
     // Assert
     await waitFor(() => {
@@ -152,7 +151,7 @@ describe('RegisterPage', () => {
     });
   });
 
-  it('在註冊期間，按鈕應顯示 "處理中..." 並被禁用', async () => {
+  it('在註冊期間，按鈕應顯示 "註冊中..." 並被禁用', async () => {
     // Arrange
     (useRegister as vi.Mock).mockReturnValue({
       mutateAsync: mockMutateAsync,
@@ -162,7 +161,7 @@ describe('RegisterPage', () => {
     renderWithRoutes();
 
     // Assert
-    const button = screen.getByRole('button', { name: '處理中...' });
+    const button = screen.getByRole('button', { name: '註冊中...' });
     expect(button).toBeInTheDocument();
     expect(button).toBeDisabled();
   });

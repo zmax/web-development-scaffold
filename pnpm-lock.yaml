@@ -242,12 +242,21 @@ importers:
 
   packages/ui:
     dependencies:
+      '@axiom/types':
+        specifier: workspace:*
+        version: link:../types
       '@axiom/utils':
         specifier: workspace:*
         version: link:../utils
+      '@hookform/resolvers':
+        specifier: ^3.9.0
+        version: 3.10.0(react-hook-form@7.60.0(react@18.3.1))
       react:
         specifier: ^18.2.0
         version: 18.3.1
+      react-hook-form:
+        specifier: ^7.52.1
+        version: 7.60.0(react@18.3.1)
     devDependencies:
       '@radix-ui/react-label':
         specifier: ^2.1.7
