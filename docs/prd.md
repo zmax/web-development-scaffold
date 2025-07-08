@@ -185,5 +185,21 @@ graph TD
   - E2E 測試 (Playwright/Cypress)
   - API 文件 (Swagger)
 - **基礎設施**:
-  - 完整的 CI/CD 工作流程
   - 基於角色的存取控制 (RBAC)
+  - 完整的 CI/CD 工作流程
+
+```mermaid
+graph TD
+    A[Push / Pull Request] --> B{觸發 GitHub Actions};
+    B --> C["安裝依賴 (pnpm install)"];
+    C --> D["執行 Linting (pnpm lint)"];
+    D --> E["執行 Formatting (pnpm format)"];
+    E --> F["執行測試 (pnpm test)"];
+    F -- 測試通過 --> G["構建前端應用 (pnpm build:web)"];
+    G --> H["構建後端應用 (pnpm build:api)"];
+    H -- 構建成功 --> I["部署 (手動或自動)"];
+    D -- Linting 失敗 --> J[PR 檢查失敗];
+    E -- Formatting 失敗 --> J;
+    F -- 測試失敗 --> J;
+    H -- 構建失敗 --> J;
+```

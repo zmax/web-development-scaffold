@@ -9,6 +9,34 @@
 
 ## 決策 (Decision)
 
+```mermaid
+graph TD
+    subgraph "Monorepo Root"
+        direction LR
+        A[apps/web]
+        B[packages/ui]
+        C[packages/types]
+    end
+
+    subgraph "packages/ui (重構後)"
+        direction TB
+        UI_ROOT[src/] --> UI_BASE[src/components/base/];
+        UI_ROOT --> UI_BLOCKS[src/components/blocks/];
+        UI_BASE --> UI_ATOMS["原子元件 (e.g., Button, Input, Label)"];
+        UI_BLOCKS --> UI_COMPOUNDS["複合區塊 (e.g., LoginForm, RegisterForm)"];
+    end
+
+    UI_ATOMS -- 基於 --> Shadcn[Shadcn/UI];
+    UI_COMPOUNDS -- 組合 --> UI_ATOMS;
+    A -- 使用 --> UI_COMPOUNDS;
+    A -- 使用 --> UI_ATOMS;
+    A -- 使用 --> C;
+    B -- 使用 --> C;
+
+    style Shadcn fill:#f9f,stroke:#333,stroke-width:2px;
+
+```
+
 我們決定採用 **Shadcn/UI** 作為 UI 系統的基礎。它並非傳統的元件庫，而是一組基於 Radix UI 和 Tailwind CSS 的高品質、可複製到專案中的元件原始碼。
 
 基於此，我們在 `packages/ui` 中設計了一個兩層的元件架構：

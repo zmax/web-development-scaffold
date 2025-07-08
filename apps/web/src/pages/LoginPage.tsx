@@ -53,7 +53,10 @@ export const LoginPage: FC = () => {
     <div className='flex items-center justify-center min-h-screen bg-gray-100 dark:bg-gray-950'>
       <Card className='w-full max-w-sm'>
         <CardHeader>
-          <CardTitle className='text-2xl font-bold text-center'>登入</CardTitle>
+          <CardTitle className='text-2xl font-bold text-center'>
+            <h1 className='sr-only'>登入</h1>
+            登入
+          </CardTitle>
         </CardHeader>
         <form onSubmit={handleSubmit(onSubmit)}>
           <CardContent className='grid gap-4'>

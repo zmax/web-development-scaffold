@@ -35,7 +35,15 @@
 - [ ] 建立 GitHub Actions 工作流程。
 - [ ] 設定 CI 流程，自動執行 Linting, Testing 和 Building。
 
-## Phase 5: 未來功能與強化 (Future Features & Enhancements)
+## Phase 5: UI 架構重構 (UI Architecture Refactoring)
+
+- [ ] **整合 Shadcn/UI**: 根據 ADR-0001，初始化 Shadcn/UI 並設定 Monorepo 的路徑別名。
+- [ ] **重構 `packages/ui` 目錄結構**: 建立 `base` 和 `blocks` 子目錄，並遷移現有原子元件。
+- [ ] **建立 `LoginForm` 複合區塊**: 將登入頁的表單邏輯抽離至 `packages/ui/src/components/blocks/LoginForm.tsx`。
+- [ ] **建立 `RegisterForm` 複合區塊**: 將註冊頁的表單邏輯抽離至 `packages/ui/src/components/blocks/RegisterForm.tsx`。
+- [ ] **重構頁面元件**: 更新 `LoginPage` 和 `RegisterPage` 以使用新的複合區塊。
+
+## Phase 6: 未來功能與強化 (Future Features & Enhancements)
 
 - [ ] **文件與開發體驗**:
   - [ ] 為 `packages/ui` 導入 Storybook，建立互動式元件文件。

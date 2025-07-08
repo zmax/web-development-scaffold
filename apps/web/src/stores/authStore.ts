@@ -4,7 +4,7 @@ import type { AuthResponse } from '@axiom/types';
 
 interface AuthState {
   auth: AuthResponse | null;
-  setAuth: (data: AuthResponse) => void;
+  setAuth: (data: AuthResponse | null | undefined) => void;
   clearAuth: () => void;
 }
 
@@ -12,7 +12,7 @@ export const useAuthStore = create<AuthState>()(
   persist(
     set => ({
       auth: null,
-      setAuth: (data: AuthResponse) => set({ auth: data }),
+      setAuth: (data: AuthResponse | null | undefined) => set({ auth: data }),
       clearAuth: () => set({ auth: null }),
     }),
     {

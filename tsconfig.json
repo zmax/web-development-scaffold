@@ -7,7 +7,7 @@
   "files": [],
   "references": [
     {
-      "path": "./apps/web"
+      "path": "./apps/web/tsconfig.dev.json"
     },
     {
       "path": "./apps/api"

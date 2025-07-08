@@ -12,7 +12,10 @@
     "noEmit": true, // 建構時只做型別檢查，實際輸出由 Vite 負責
     "baseUrl": ".",
     "paths": {
-      "@/*": ["src/*"]
+      "@/*": ["src/*"],
+      "@axiom/types/*": ["../../packages/types/src/*"],
+      "@axiom/ui/*": ["../../packages/ui/src/*"],
+      "@axiom/utils/*": ["../../packages/utils/src/*"]
     }
   },
   // 使用 'include' 來指定建構時應包含的目錄。

@@ -55,7 +55,10 @@ export function RegisterPage() {
     <div className='flex items-center justify-center min-h-screen bg-gray-100 dark:bg-gray-950'>
       <Card className='w-full max-w-sm'>
         <CardHeader>
-          <CardTitle className='text-2xl'>註冊</CardTitle>
+          <CardTitle className='text-2xl'>
+            <h1 className='sr-only'>註冊</h1>
+            註冊
+          </CardTitle>
           <CardDescription>
             已經有帳戶了？{' '}
             <Link to='/login' className='underline'>

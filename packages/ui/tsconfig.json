@@ -13,7 +13,13 @@
     "jsx": "react-jsx"
   },
   "include": ["src"],
-  "exclude": ["node_modules", "dist", "src/**/*.test.{ts,tsx}", "test"],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "src/**/*.test.ts",
+    "src/**/*.test.tsx",
+    "test"
+  ],
   "references": [
     // 定義對共享套件的建構依賴
     {
