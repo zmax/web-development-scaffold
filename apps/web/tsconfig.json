@@ -1,9 +1,18 @@
 {
-  // This file is intentionally left empty.
-  // It's used by `tsc --build` to discover the real tsconfig files.
-  "files": [],
-  "references": [
-    { "path": "./tsconfig.dev.json" },
-    { "path": "./tsconfig.build.json" }
-  ]
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "composite": true,
+    "noEmit": true,
+    "lib": ["DOM", "DOM.Iterable", "ESNext"],
+    "jsx": "react-jsx",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "types": ["vite/client", "vitest/globals", "@testing-library/jest-dom"],
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"]
+    }
+  },
+  "include": ["src", "vite.config.ts"],
+  "exclude": ["node_modules", "dist"]
 }

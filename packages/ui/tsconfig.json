@@ -19,11 +19,11 @@
     "src/**/*.test.ts",
     "src/**/*.test.tsx",
     "test"
-  ],
-  "references": [
-    // 定義對共享套件的建構依賴
-    {
-      "path": "../utils"
-    }
   ]
+  // "references": [
+  //   // 定義對共享套件的建構依賴
+  //   {
+  //     // "path": "../utils"
+  //   }
+  // ]
 }

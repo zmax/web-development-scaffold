@@ -7,9 +7,6 @@
   "files": [],
   "references": [
     {
-      "path": "./apps/web/tsconfig.dev.json"
-    },
-    {
       "path": "./apps/api"
     },
     {
