@@ -7,15 +7,11 @@
     "jsx": "react-jsx",
     "module": "ESNext",
     "moduleResolution": "bundler",
-    "composite": true,
     // --- 輸出設定 ---
     "noEmit": true, // 建構時只做型別檢查，實際輸出由 Vite 負責
     "baseUrl": ".",
     "paths": {
-      "@/*": ["src/*"],
-      "@axiom/types/*": ["../../packages/types/src/*"],
-      "@axiom/ui/*": ["../../packages/ui/src/*"],
-      "@axiom/utils/*": ["../../packages/utils/src/*"]
+      "@/*": ["src/*"]
     }
   },
   // 使用 'include' 來指定建構時應包含的目錄。
@@ -29,17 +25,5 @@
     "src/**/*.test.ts",
     "src/**/*.test.tsx",
     "src/test" // 排除測試工具函式目錄
-  ],
-  // 專案引用保持不變
-  "references": [
-    {
-      "path": "../../packages/ui"
-    },
-    {
-      "path": "../../packages/utils"
-    },
-    {
-      "path": "../../packages/types"
-    }
   ]
 }
