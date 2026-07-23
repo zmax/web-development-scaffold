@@ -52,4 +52,6 @@ coverage/
 .tmp/
 .temp/
 
+.gemini
+
 apps/api/prisma/prisma/*.db
