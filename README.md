@@ -1,60 +1,60 @@
 # Axiom
 
-這是一個名為 **Axiom** 的專案骨架，基於 **pnpm workspace** 的 **Monorepo** 架構。它旨在提供一套不證自明的開發公理與最佳實踐，用於快速啟動現代化、可擴展的網頁應用程式。它整合了獨立的前端應用、後端 API、可共享的 UI 元件、工具函式庫和型別定義。
+This is a project scaffold named **Axiom**, built on a **Monorepo** architecture based on **pnpm workspace**. It aims to provide a set of self-evident development axioms and best practices for quickly bootstrapping modern, scalable web applications. It integrates independent frontend apps, backend APIs, shareable UI components, utility libraries, and type definitions.
 
-## ✨ 核心目標
+## ✨ Core Goals
 
-- **程式碼共享與重用**：透過 `packages` 目錄，在不同應用之間共享 UI 元件、工具函式和型別定義。
-- **開發效率**：利用 Vite 提供快速的開發伺服器和建構流程。
-- **程式碼品質**：整合 ESLint, Prettier, TypeScript 和自動化的 Git 鉤子，確保程式碼風格一致且型別安全。
-- **結構化與可維護性**：清晰的目錄結構和模組化設計，便於團隊協作和長期維護。
+- **Code Sharing & Reuse**: Share UI components, utility functions, and type definitions across different applications via the `packages` directory.
+- **Development Efficiency**: Leverage Vite for fast development servers and build processes.
+- **Code Quality**: Integrate ESLint, Prettier, TypeScript, and automated Git hooks to ensure consistent code style and type safety.
+- **Structure & Maintainability**: A clear directory structure and modular design facilitate team collaboration and long-term maintenance.
 
-## 🛠️ 技術棧
+## 🛠️ Tech Stack
 
-| 分類            | 技術                                  | 用途                                                     |
-| :-------------- | :------------------------------------ | :------------------------------------------------------- |
-| **主要框架**    | React 18                              | 建立使用者介面的核心函式庫。                             |
-| **建構工具**    | Vite                                  | 提供極速的開發伺服器和優化的生產環境建構。               |
-| **語言**        | TypeScript                            | 為專案提供靜態型別檢查，提升程式碼健壯性。               |
-| **樣式**        | Tailwind CSS                          | 一個 Utility-First 的 CSS 框架，用於快速設計 UI。        |
-| **套件管理**    | pnpm                                  | 高效能的套件管理器，並透過 workspace 功能支援 Monorepo。 |
-| **測試**        | Vitest, React Testing Library         | 用於單元測試和元件測試，確保程式碼品質。                 |
-| **程式碼規範**  | ESLint, Prettier                      | 強制程式碼風格和語法規範。                               |
-| **Commit 規範** | Commitlint, cz-conventional-changelog | 確保 Git 提交訊息的一致性和可讀性。                      |
-| **Git 鉤子**    | Husky                                 | 在 Git 事件（如 commit, push）觸發時自動執行腳本。       |
+| Category           | Technology                           | Purpose                                                   |
+| :----------------- | :----------------------------------- | :-------------------------------------------------------- |
+| **Main Framework** | React 18                             | Core library for building user interfaces.                |
+| **Build Tool**     | Vite                                 | Provides an extremely fast dev server and optimized production builds. |
+| **Language**       | TypeScript                           | Provides static type checking for the project, improving code robustness. |
+| **Styling**        | Tailwind CSS                         | A Utility-First CSS framework for rapid UI design.        |
+| **Package Manager**| pnpm                                 | A high-performance package manager with workspace support for monorepos. |
+| **Testing**        | Vitest, React Testing Library        | For unit tests and component tests to ensure code quality. |
+| **Code Standards** | ESLint, Prettier                     | Enforces code style and syntax conventions.               |
+| **Commit Standards**| Commitlint, cz-conventional-changelog | Ensures consistency and readability of Git commit messages. |
+| **Git Hooks**      | Husky                                | Automatically executes scripts on Git events (e.g., commit, push). |
 
-## 📂 專案結構
+## 📂 Project Structure
 
 ```
 .
 ├── apps/
-│   ├── api/             # 後端 API 應用程式 (Node.js)
-│   └── web/             # 前端網頁應用程式 (React)
+│   ├── api/             # Backend API application (Node.js)
+│   └── web/             # Frontend web application (React)
 ├── packages/
-│   ├── types/           # 共享的 TypeScript 型別定義
-│   ├── ui/              # 可重用的 UI 元件
-│   └── utils/           # 通用工具函式
-├── .husky/              # Git 鉤子設定
-├── scripts/             # 自動化腳本
-├── .commitlintrc.js     # Commitlint 設定
-├── eslint.config.js     # ESLint 設定
-├── prettier.config.js   # Prettier 設定
-├── tailwind.config.js   # 根 Tailwind CSS 設定
-└── tsconfig.json        # 根 TypeScript 設定
+│   ├── types/           # Shared TypeScript type definitions
+│   ├── ui/              # Reusable UI components
+│   └── utils/           # Common utility functions
+├── .husky/              # Git hooks configuration
+├── scripts/             # Automation scripts
+├── .commitlintrc.js     # Commitlint configuration
+├── eslint.config.js     # ESLint configuration
+├── prettier.config.js   # Prettier configuration
+├── tailwind.config.js   # Root Tailwind CSS configuration
+└── tsconfig.json        # Root TypeScript configuration
 ```
 
-## 🏗️ 架構與依賴關係
+## 🏗️ Architecture & Dependencies
 
-本專案採用 Monorepo 架構，將前後端應用程式 (`apps`) 和共享程式碼 (`packages`) 整合在同一個儲存庫中。
+This project follows a Monorepo architecture, integrating frontend and backend applications (`apps`) and shared code (`packages`) within a single repository.
 
-### 依賴關係圖
+### Dependency Graph
 
 ```mermaid
 graph TD
-    subgraph legend [圖例]
+    subgraph legend [Legend]
         direction LR
-        app((應用程式))
-        pkg([共享套件])
+        app((Application))
+        pkg([Shared Package])
     end
 
     subgraph Applications
@@ -70,99 +70,99 @@ graph TD
         P3("@axiom/types"):::pkg
     end
 
-    A1 -- "依賴" --> P1
-    A1 -- "依賴" --> P2
-    A1 -- "依賴" --> P3
+    A1 -- "depends on" --> P1
+    A1 -- "depends on" --> P2
+    A1 -- "depends on" --> P3
 
-    A2 -- "依賴" --> P3
+    A2 -- "depends on" --> P3
 
-    P1 -- "依賴" --> P2
-    P1 -- "依賴" --> P3
+    P1 -- "depends on" --> P2
+    P1 -- "depends on" --> P3
 
-    %% 定義節點樣式：選用低飽和度的莫蘭迪色系，並確保文字顏色 #333 以維持對比度
+    %% Define node styles: use low-saturation muted colors with #333 text for contrast
     classDef app fill:#a9c4b3,stroke:#333,stroke-width:2px,color:#333;
     classDef pkg fill:#d3baba,stroke:#333,stroke-width:2px,color:#333;
 ```
 
-- **`apps/web`**: 前端應用，依賴 `ui`（元件）、`utils`（工具）和 `types`（型別）。
-- **`apps/api`**: 後端 API，依賴 `types`（型別）以確保與前端的資料結構一致。
-- **`packages/ui`**: 共享元件庫，依賴 `utils` 和 `types`。
-- **`packages/utils`** 和 **`packages/types`**: 基礎套件，無內部依賴。
+- **`apps/web`**: Frontend application, depends on `ui` (components), `utils` (utilities), and `types` (type definitions).
+- **`apps/api`**: Backend API, depends on `types` (type definitions) to ensure data structure consistency with the frontend.
+- **`packages/ui`**: Shared component library, depends on `utils` and `types`.
+- **`packages/utils`** and **`packages/types`**: Foundational packages with no internal dependencies.
 
-## 🚀 開始使用
+## 🚀 Getting Started
 
-### 先決條件
+### Prerequisites
 
-- [Node.js](https://nodejs.org/) (建議 LTS 版本)
+- [Node.js](https://nodejs.org/) (LTS version recommended)
 - [pnpm](https://pnpm.io/installation)
 
-### 安裝
+### Installation
 
-1.  **複製儲存庫：**
+1. **Clone the repository:**
 
     ```bash
     git clone <your-repository-url>
     cd axiom
     ```
 
-2.  **安裝依賴項：**
+2. **Install dependencies:**
     ```bash
     pnpm install
     ```
 
-### 開發
+### Development
 
-同時啟動前端和後端開發伺服器：
+Start both the frontend and backend dev servers simultaneously:
 
 ```bash
 pnpm dev
 ```
 
-- 前端 (`web`) 將運行在 `http://localhost:5173`。
-- 後端 (`api`) 將運行在 `http://localhost:3000`。
+- The frontend (`web`) will run at `http://localhost:5173`.
+- The backend (`api`) will run at `http://localhost:3000`.
 
-## 📜 可用腳本
+## 📜 Available Scripts
 
-| 指令              | 描述                                   |
-| :---------------- | :------------------------------------- |
-| `pnpm dev`        | 同時啟動所有 `apps` 的開發伺服器。     |
-| `pnpm build`      | 建構所有套件和應用程式以供生產。       |
-| `pnpm test`       | 執行所有測試。                         |
-| `pnpm test:watch` | 以監聽模式執行測試。                   |
-| `pnpm lint`       | 檢查整個專案的程式碼風格。             |
-| `pnpm format`     | 自動格式化所有檔案。                   |
-| `pnpm type-check` | 執行 TypeScript 的型別檢查。           |
-| `pnpm clean`      | 清理所有 `dist` 目錄。                 |
-| `pnpm commit`     | 使用 Commitizen 引導式地產生提交訊息。 |
+| Command           | Description                                     |
+| :---------------- | :---------------------------------------------- |
+| `pnpm dev`        | Start dev servers for all `apps`.               |
+| `pnpm build`      | Build all packages and apps for production.     |
+| `pnpm test`       | Run all tests.                                  |
+| `pnpm test:watch` | Run tests in watch mode.                        |
+| `pnpm lint`       | Check code style across the entire project.     |
+| `pnpm format`     | Auto-format all files.                          |
+| `pnpm type-check` | Run TypeScript type checking.                   |
+| `pnpm clean`      | Clean all `dist` directories.                   |
+| `pnpm commit`     | Use Commitizen to interactively generate commit messages. |
 
-## 🤝 貢獻
+## 🤝 Contributing
 
-我們非常歡迎所有形式的貢獻！如果您希望為 Axiom 專案做出貢獻，請遵循以下步驟：
+All forms of contribution are welcome! If you'd like to contribute to the Axiom project, please follow these steps:
 
-### 開發流程
+### Development Workflow
 
-1.  **Fork 本儲存庫** 到您自己的 GitHub 帳戶。
-2.  從 `develop` 分支建立一個新的功能分支。請遵循以下命名慣例：
-    - 新功能: `feat/a-brief-description` (例如: `feat/user-password-reset`)
-    - 錯誤修復: `fix/a-brief-description` (例如: `fix/login-form-validation`)
-3.  進行您的程式碼變更。
-4.  在提交之前，請確保所有品質檢查都已通過：
-    - 執行測試: `pnpm test`
-    - 檢查程式碼風格: `pnpm lint`
-5.  **提交您的變更**。本專案嚴格遵守 Conventional Commits 規範。我們強烈建議使用 `pnpm commit` 指令，它會引導您產生合規的提交訊息。
-6.  將您的功能分支推送到您 Fork 的儲存庫。
-7.  建立一個 Pull Request，目標分支為原始儲存庫的 `develop` 分支。請在 PR 的描述中詳細說明您的變更內容。
+1. **Fork** this repository to your own GitHub account.
+2. Create a new feature branch from the `develop` branch. Follow these naming conventions:
+    - New feature: `feat/a-brief-description` (e.g., `feat/user-password-reset`)
+    - Bug fix: `fix/a-brief-description` (e.g., `fix/login-form-validation`)
+3. Make your code changes.
+4. Before committing, ensure all quality checks pass:
+    - Run tests: `pnpm test`
+    - Check code style: `pnpm lint`
+5. **Commit your changes**. This project strictly follows Conventional Commits. We strongly recommend using the `pnpm commit` command, which guides you through generating a compliant commit message.
+6. Push your feature branch to your forked repository.
+7. Create a Pull Request targeting the `develop` branch of the original repository. Provide a detailed description of your changes in the PR.
 
-## 🔮 後續發展建議
+## 🔮 Future Enhancements
 
-- **元件庫文件**: 為 `packages/ui` 增加 Storybook 或類似工具，以建立元件文件和互動式展示。
-- **狀態管理**: 根據應用複雜度，考慮引入 Zustand, Redux Toolkit 或其他狀態管理方案。
-- **CI/CD**: 建立自動化的持續整合與部署流程 (例如使用 GitHub Actions)，在程式碼推送到主分支時自動執行測試、建構和部署。
+- **Component Library Docs**: Add Storybook or similar tooling to `packages/ui` for component documentation and interactive showcases.
+- **State Management**: Depending on application complexity, consider introducing Zustand, Redux Toolkit, or other state management solutions.
+- **CI/CD**: Set up automated continuous integration and deployment pipelines (e.g., using GitHub Actions) to automatically run tests, builds, and deployments on code pushes to the main branch.
 
-## 📚 專案文件
+## 📚 Project Documentation
 
-本專案的核心文件存放於 `docs/` 目錄下：
+Core project documentation is stored in the `docs/` directory:
 
-- **產品需求文件 (PRD)**: 定義專案的願景、目標和功能需求。
-- **架構決策紀錄 (ADRs)**: 記錄重要的技術選擇及其背後的理由。
-- **開發待辦清單 (TODO)**: 追蹤專案的開發進度和未來規劃。
+- **Product Requirements Document (PRD)**: Defines the project's vision, goals, and feature requirements.
+- **Architecture Decision Records (ADRs)**: Records important technical choices and their rationale.
+- **Development TODO List**: Tracks project progress and future plans.
